@@ -1,0 +1,29 @@
+{
+  "name": "laundress",
+  "private": true,
+  "version": "0.0.1",
+  "description": "laundress",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"not implemented\""
+  },
+  "workspaces": {
+    "packages": [
+      "packages/**"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ynoplanetashka2/laundress.git"
+  },
+  "author": "ynoplanetashka",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/ynoplanetashka2/laundress/issues"
+  },
+  "homepage": "https://github.com/ynoplanetashka2/laundress#readme",
+  "packageManager": "yarn@4.4.1",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  }
+}
