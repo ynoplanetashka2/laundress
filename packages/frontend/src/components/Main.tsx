@@ -1,6 +1,7 @@
 import TimeTable from './TimeTable';
 import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
+import LanguageSelect from './LanguageSelect';
 
 export default function Main() {
   // const [tabIndex, setTabIndex] = useState(0);
@@ -28,6 +29,7 @@ export default function Main() {
   // );
   return (
     <>
+      <LanguageSelect /> <br />
       <GoogleAccountInfo />
       <SignInButton />
       <TimeTable
