@@ -3,5 +3,13 @@
     "changeAccount": "сменить аккаунт"
   },
   "Timetable": {
+    "time": "ВРЕМЯ",
+    "monday": "понедельник",
+    "tuesday": "вторник",
+    "wednesday": "среда",
+    "thursday": "четверг",
+    "friday": "пятница",
+    "saturday": "суббота",
+    "sunday": "воскресенье"
   }
 }
