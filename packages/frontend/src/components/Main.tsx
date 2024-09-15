@@ -1,9 +1,12 @@
+'use client';
 import TimeTable from './TimeTable';
 import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
+import { useTranslations } from 'next-intl';
 
 export default function Main() {
+  const t = useTranslations('Timetable');
   // const [tabIndex, setTabIndex] = useState(0);
   // function handleTabChange(_: unknown, newValue: number) {
   //   setTabIndex(newValue);
@@ -35,10 +38,12 @@ export default function Main() {
       <TimeTable
         style={{
           height: '500px',
-          width: '80vw',
+          width: '100vw',
+          maxWidth: '800px',
+          margin: '0 auto',
         }}
         events={{
-          monday: [
+          [t('monday')]: [
             {
               startTime: new Date('2024-09-14T05:00:00.000Z'),
               endTime: new Date('2024-09-14T06:30:00.000Z'),
@@ -50,7 +55,7 @@ export default function Main() {
               label: 'senya',
             },
           ],
-          tuesday: [
+          [t('tuesday')]: [
             {
               startTime: new Date('2024-09-14T06:00:00.000Z'),
               endTime: new Date('2024-09-14T08:00:00.000Z'),
@@ -58,7 +63,8 @@ export default function Main() {
             },
           ],
         }}
-        daysOrder={['monday', 'tuesday']}
+        daysOrder={[t('monday'),t('tuesday')]}
+        timeColumnHeader={t('time')}
       />
     </>
   );

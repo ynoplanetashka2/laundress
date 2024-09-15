@@ -3,5 +3,13 @@
     "changeAccount": "change account"
   },
   "Timetable": {
+    "time": "TIME",
+    "monday": "monday",
+    "tuesday": "tuesday",
+    "wednesday": "wednesday",
+    "thursday": "thursday",
+    "friday": "friday",
+    "saturday": "saturday",
+    "sunday": "sunday"
   }
 }

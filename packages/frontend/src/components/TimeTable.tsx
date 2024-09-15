@@ -14,6 +14,7 @@ type EventsMap<DayLabel extends string> = {
 type Props<DayLabel extends string> = {
   events: EventsMap<DayLabel>;
   daysOrder: DayLabel[];
+  timeColumnHeader?: string;
   style: React.CSSProperties;
 }
 
@@ -44,7 +45,7 @@ function computeProportionsForEvents(minTime: number, maxTime: number, timeValue
   return result.map(normalize);
 }
 
-export default function TimeTable<DayLabel extends string>({ style, events, daysOrder }: Props<DayLabel>) {
+export default function TimeTable<DayLabel extends string>({ style, events, daysOrder, timeColumnHeader = 'TIME' }: Props<DayLabel>) {
   const MIN_TIME = 7
   const MAX_TIME = 18
   const MIN_DATE_TIME = DateTime.local().set({ hour: MIN_TIME, minute: 0, second: 0, millisecond: 0, })
@@ -70,7 +71,7 @@ export default function TimeTable<DayLabel extends string>({ style, events, days
         }}
         className="border-b-2 border-r-2 border-slate-800 text-center"
       >
-        TIME
+        { timeColumnHeader }
       </div>
       {
         timeValues.map((timeValue, rowIndex) => (
