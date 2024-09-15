@@ -1,5 +1,5 @@
 'use client';
-import TimeTable from './TimeTable';
+import Timetable from './TimeTable';
 import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
@@ -35,7 +35,7 @@ export default function Main() {
       <LanguageSelect /> <br />
       <GoogleAccountInfo />
       <SignInButton />
-      <TimeTable
+      <Timetable
         style={{
           height: '500px',
           width: '100vw',

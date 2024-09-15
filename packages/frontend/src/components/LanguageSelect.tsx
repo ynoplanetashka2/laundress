@@ -1,8 +1,6 @@
 'use client';
-import { routing, usePathname, useRouter } from '@/i18n/routing';
+import { SUPPORTED_LOCALES, usePathname, useRouter } from '@/i18n/routing';
 import { useLocale } from 'next-intl';
-import { useParams,  } from 'next/navigation';
-import { format } from 'node:url';
 import { useTransition, type ChangeEvent } from 'react';
 
 export default function LanguageSelect() {
@@ -12,19 +10,16 @@ export default function LanguageSelect() {
   const pathname = usePathname();
 
   function handleChange(event: ChangeEvent<HTMLSelectElement>) {
-    const nextLocale = event.target.value;
+    const nextLocale = event.target.value as (typeof SUPPORTED_LOCALES)[number];
     startTransition(() => {
-      router.push(
-        pathname,
-        {
-          locale: nextLocale as any,
-        }
-      );
+      router.push(pathname, {
+        locale: nextLocale,
+      });
     });
   }
   return (
     <select defaultValue={locale} onChange={handleChange} disabled={isPending}>
-      {routing.locales.map((loc) => (
+      {SUPPORTED_LOCALES.map((loc) => (
         <option key={loc} value={loc}>
           {loc}
         </option>
