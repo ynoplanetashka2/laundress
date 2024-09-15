@@ -3,20 +3,27 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "next dev --port 443 --turbo --experimental-https --hostname localhost",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.0",
     "axios": "^1.7.7",
     "lodash": "^4.17.21",
+    "luxon": "^3.5.0",
     "next": "14.2.8",
+    "next-auth": "^4.24.7",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-timetable-events": "^2.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.7",
+    "@types/luxon": "^3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
