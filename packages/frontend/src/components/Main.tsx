@@ -7,6 +7,7 @@ import { getTranslations } from 'next-intl/server';
 import TagsEditList from './TagsEditList';
 import { getServerSession } from 'next-auth';
 import { isNil } from 'lodash';
+import { Card } from '@mui/material';
 
 export default async function Main() {
   const t = await getTranslations('Timetable');
@@ -40,19 +41,28 @@ export default async function Main() {
   //   </>
   // );
   return (
-    <>
-      <LanguageSelect /> <br />
-      <span> isAdmin: {String(isAdmin)} </span> <br />
-      <GoogleAccountInfo />
-      <TagsEditList tags={['vasya', 'gena']} /> <br />
-      <SignInButton />
-      <pre>{ JSON.stringify(accounts, null, 2) }</pre>
+    <div
+      style={{
+        maxWidth: '800px',
+        width: '80vw',
+        margin: '0 auto',
+      }}
+      className="bg-cyan-100 px-10 pt-3"
+    >
+      <span>language: <LanguageSelect /></span> <br />
+      {/* <span> isAdmin: {String(isAdmin)} </span> <br /> */}
+      <Card variant='elevation' className='w-min p-3 my-2'>
+        <GoogleAccountInfo />
+        <div className="flex justify-center my-2">
+          <SignInButton />
+        </div>
+      </Card>
+      {/* <TagsEditList tags={['vasya', 'gena']} /> <br /> */}
+      {/* <pre>{ JSON.stringify(accounts, null, 2) }</pre> */}
       <Timetable
         style={{
           height: '500px',
-          width: '100vw',
-          maxWidth: '800px',
-          margin: '0 auto',
+          width: '100%',
         }}
         events={{
           [t('monday')]: [
@@ -78,6 +88,6 @@ export default async function Main() {
         daysOrder={[t('monday'),t('tuesday')]}
         timeColumnHeader={t('time')}
       />
-    </>
+    </div>
   );
 }

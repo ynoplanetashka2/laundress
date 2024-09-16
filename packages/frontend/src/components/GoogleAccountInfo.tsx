@@ -15,8 +15,8 @@ export default function GoogleAccountInfo() {
   }
   if (status === 'loading') {
     return (<>
-      <span> <InlineSkeleton width="300px" /> <br /> <InlineSkeleton width="300px" /> </span>
-      <Skeleton variant="circular" width="100px" height="100px" />
+      <span> <InlineSkeleton width="200px" /> <br /> <InlineSkeleton width="200px" /> </span>
+      <Skeleton variant="circular" width="100px" height="100px" className='mx-auto mt-2' />
     </>);
   }
   if (!data?.user) {
@@ -34,7 +34,7 @@ export default function GoogleAccountInfo() {
       <span> { email } <br /> { name } </span>
       {
         !isNil(image) 
-        ? <Image src={image} alt="Your account icon" width="100" height="100" style={{ borderRadius: '50%' }} />
+        ? <Image src={image} alt="Your account icon" width="100" height="100" style={{ borderRadius: '50%' }} className='mx-auto mt-2' />
         : <span> no image </span>
       }
     </>

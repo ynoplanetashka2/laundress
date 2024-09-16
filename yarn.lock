@@ -1106,6 +1106,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/material-nextjs@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "@mui/material-nextjs@npm:6.1.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.6"
+  peerDependencies:
+    "@emotion/cache": ^11.11.0
+    "@emotion/react": ^11.11.4
+    "@emotion/server": ^11.11.0
+    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
+    next: ^13.0.0 || ^14.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/cache":
+      optional: true
+    "@emotion/server":
+      optional: true
+    "@types/react":
+      optional: true
+  checksum: 10c0/39e6a4d86785c8aacd1081c4ad39e2250bbf5a0a7a1dd5bd030234837722e35e35fa59cb1124beefb54115f6446222870f9886753044a291d6bb52df0c5764d4
+  languageName: node
+  linkType: hard
+
 "@mui/material@npm:^6.1.0":
   version: 6.1.0
   resolution: "@mui/material@npm:6.1.0"
@@ -6585,9 +6608,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "laundress-frontend@workspace:packages/frontend"
   dependencies:
+    "@emotion/cache": "npm:^11.13.1"
     "@emotion/react": "npm:^11.13.3"
     "@emotion/styled": "npm:^11.13.0"
     "@mui/material": "npm:^6.1.0"
+    "@mui/material-nextjs": "npm:^6.1.0"
     "@types/lodash": "npm:^4.17.7"
     "@types/luxon": "npm:^3"
     "@types/node": "npm:^20"
