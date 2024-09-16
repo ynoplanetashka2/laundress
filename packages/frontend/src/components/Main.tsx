@@ -1,5 +1,5 @@
 'use client';
-import Timetable from './TimeTable';
+import Timetable from './Timetable';
 import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
