@@ -1,4 +1,3 @@
-'use client';
 import Timetable from './Timetable';
 import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
