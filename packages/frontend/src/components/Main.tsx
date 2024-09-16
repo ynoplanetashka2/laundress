@@ -3,9 +3,14 @@ import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
 import { useTranslations } from 'next-intl';
+import { getUsersEmails } from '@/api/getUsersEmails';
+import { getTranslations } from 'next-intl/server';
+import { getAccordionUtilityClass } from '@mui/material';
 
-export default function Main() {
-  const t = useTranslations('Timetable');
+export default async function Main() {
+  const t = await getTranslations('Timetable');
+  const usersEmails = await getUsersEmails();
+  console.log(usersEmails)
   // const [tabIndex, setTabIndex] = useState(0);
   // function handleTabChange(_: unknown, newValue: number) {
   //   setTabIndex(newValue);
@@ -34,6 +39,7 @@ export default function Main() {
       <LanguageSelect /> <br />
       <GoogleAccountInfo />
       <SignInButton />
+      <pre>{ JSON.stringify(usersEmails, null, 2) }</pre>
       <Timetable
         style={{
           height: '500px',
