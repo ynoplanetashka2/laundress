@@ -4,6 +4,7 @@ import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
 import { getUsersEmails } from '@/api/getUsersEmails';
 import { getTranslations } from 'next-intl/server';
+import TagsEditList from './TagsEditList';
 
 export default async function Main() {
   const t = await getTranslations('Timetable');
@@ -35,6 +36,7 @@ export default async function Main() {
     <>
       <LanguageSelect /> <br />
       <GoogleAccountInfo />
+      <TagsEditList tags={['vasya', 'gena']} /> <br />
       <SignInButton />
       <pre>{ JSON.stringify(usersEmails, null, 2) }</pre>
       <Timetable
