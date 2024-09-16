@@ -2,13 +2,20 @@ import Timetable from './Timetable';
 import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
-import { getUsersEmails } from '@/api/getUsersEmails';
+import { getAccounts } from '@/api/getAccounts';
 import { getTranslations } from 'next-intl/server';
 import TagsEditList from './TagsEditList';
+import { getServerSession } from 'next-auth';
+import { isNil } from 'lodash';
 
 export default async function Main() {
   const t = await getTranslations('Timetable');
-  const usersEmails = await getUsersEmails();
+  const [session, accounts] = await Promise.all([await getServerSession(), await getAccounts()]);
+  const email = session?.user?.email;
+  if (isNil(email)) {
+    throw new Error('user has no email');
+  }
+  const isAdmin = accounts.filter(({ priviledge }) => priviledge === 'admin').map(({ email }) => email).includes(email);
   // const [tabIndex, setTabIndex] = useState(0);
   // function handleTabChange(_: unknown, newValue: number) {
   //   setTabIndex(newValue);
@@ -35,10 +42,11 @@ export default async function Main() {
   return (
     <>
       <LanguageSelect /> <br />
+      <span> isAdmin: {String(isAdmin)} </span> <br />
       <GoogleAccountInfo />
       <TagsEditList tags={['vasya', 'gena']} /> <br />
       <SignInButton />
-      <pre>{ JSON.stringify(usersEmails, null, 2) }</pre>
+      <pre>{ JSON.stringify(accounts, null, 2) }</pre>
       <Timetable
         style={{
           height: '500px',
