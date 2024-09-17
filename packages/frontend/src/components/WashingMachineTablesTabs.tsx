@@ -13,6 +13,7 @@ import { DateTime } from 'luxon';
 import { useTranslations } from 'next-intl';
 import { BookingForm } from './BookingForm';
 import { bookMachineTime } from '@/api/bookMachineTime';
+import { useSession } from 'next-auth/react';
 
 type MachinesBookings = {
   [machineId in string]: Booking[];
@@ -35,7 +36,8 @@ const WEEKDAY_NUMBER_TO_NAME = {
 type WEEKDAY_NUMBER = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 const WEEKDAYS_NAMES = values(WEEKDAY_NUMBER_TO_NAME);
 
-function bookingsToTimetableParams(bookings: Booking[]) {
+function bookingsToTimetableParams(bookings: Booking[], userEmail?: string | undefined
+) {
   function getWeekday(date: Date) {
     return DateTime.fromJSDate(date, { zone: 'UTC+3' }).weekday;
   }
@@ -57,10 +59,11 @@ function bookingsToTimetableParams(bookings: Booking[]) {
     ),
     (bookingsAtDay) => {
       return bookingsAtDay.map(
-        ({ fromTime, upToTime, firstname, lastname, roomNumber }) => ({
+        ({ fromTime, upToTime, firstname, lastname, roomNumber, bookedUserEmail }) => ({
           startTime: fromTime,
           endTime: upToTime,
           label: generateLabel(firstname, lastname, roomNumber),
+          isRemovable: userEmail === bookedUserEmail
         }),
       );
     },
@@ -81,20 +84,21 @@ export default function WashingMachineTablesTabs({
   }
   const [currentMachineId, setCurrentMachineId] = useState(machineIds.at(0)!);
   const t = useTranslations('Timetable');
+  const session = useSession();
+  const userEmail = session.data?.user?.email;
   const daysLabels = Object.fromEntries(WEEKDAYS_NAMES.map((weekdayName) => [weekdayName, t(weekdayName)]))
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={currentMachineId}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ borderBottom: 2, borderColor: 'divider' }}>
           <TabList
             onChange={(_, newCurrentMachineId) =>
               setCurrentMachineId(newCurrentMachineId)
             }
-            aria-label="lab API tabs example"
           >
             {washingMachines.map(({ _id: machineId, label }) => (
-              <Tab key={machineId} label={label} value={machineId} />
+              <Tab key={machineId} label={label} value={machineId}/>
             ))}
           </TabList>
         </Box>
@@ -102,7 +106,7 @@ export default function WashingMachineTablesTabs({
           const bookings = machineBookings[machineId];
           const { daysOrder, events } =
             bookings !== undefined
-              ? bookingsToTimetableParams(bookings)
+              ? bookingsToTimetableParams(bookings, userEmail ?? undefined)
               : {
                   daysOrder: [],
                   events: {},

@@ -4,6 +4,7 @@ import type React from 'react';
 export type Event = {
   startTime: Date;
   endTime: Date;
+  isRemovable: boolean;
   label: string;
 };
 
@@ -176,14 +177,14 @@ export default function Timetable<DayLabel extends string>({
                 .join(' '),
             }}
           >
-            {todaysEvents.map(({ label, startTime, endTime }, eventIndex) => (
+            {todaysEvents.map(({ label, startTime, endTime, isRemovable }, eventIndex) => (
               <div
                 key={`event-${eventIndex}`}
                 style={{
                   gridColumn: 1,
                   gridRow: 2 * eventIndex + 2,
                 }}
-                className="bg-orange-400 bg-opacity-80 text-center overflow-y-auto"
+                className={`${isRemovable ? 'bg-green-300' : 'bg-orange-400' } bg-opacity-80 text-center overflow-y-auto`}
               >
                 <span>{label}</span>
                 <br />

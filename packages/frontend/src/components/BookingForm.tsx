@@ -22,6 +22,7 @@ export function BookingForm({ style, onSubmit, washingMachineId, }: Props) {
   const [upToTime, setUpToTime] = useState(DateTime.now().plus({ minutes: 5 }).plus({ hour: DEFAULT_ADVANCE_HOURS }));
   const [roomNumber, setRoomNumber] = useState('000');
   const id = useId();
+  const washingMachineInputId = `washing-machine-input-${id}`;
   const firstnameInputId = `firstname-input-${id}`;
   const lastnameInputId = `lastname-input-${id}`;
   const roomNumberInputId = `room-number-input-${id}`;
@@ -47,6 +48,10 @@ export function BookingForm({ style, onSubmit, washingMachineId, }: Props) {
   return (
     <div style={{...style, position: 'relative' }}>
       <form className='top-0 left-0 right-0 bottom-0 relative' onSubmit={handleSubmit}>
+        <div className="flex justify-between m-1">
+          <FormLabel htmlFor={washingMachineInputId}>{ t('washingMachine') }</FormLabel>
+          <Input id={washingMachineInputId} value={washingMachineId} disabled/>
+        </div>
         <div className="flex justify-between m-1">
           <FormLabel htmlFor={firstnameInputId}>{ t('firstname') }</FormLabel>
           <Input id={firstnameInputId} value={firstname} onChange={(e) => setFirstname(e.target.value)} />
