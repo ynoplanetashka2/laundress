@@ -11,5 +11,11 @@
     "friday": "friday",
     "saturday": "saturday",
     "sunday": "sunday"
+  },
+  "Booking": {
+    "firstname": "firstname",
+    "lastname": "lastname",
+    "roomNumber": "room number",
+    "reserve": "reserve"
   }
 }

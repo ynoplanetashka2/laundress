@@ -11,5 +11,11 @@
     "friday": "пятница",
     "saturday": "суббота",
     "sunday": "воскресенье"
+  },
+  "Booking": {
+    "firstname": "имя",
+    "lastname": "фамилия",
+    "roomNumber": "номер комнаты",
+    "reserve": "забронировать"
   }
 }

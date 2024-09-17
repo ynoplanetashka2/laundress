@@ -8,6 +8,9 @@ import TagsEditList from './TagsEditList';
 import { getServerSession } from 'next-auth';
 import { isNil } from 'lodash';
 import { Card } from '@mui/material';
+import { BookingForm } from './BookingForm';
+import { bookMachineTime } from '@/api/bookMachineTime';
+import { getBookings } from '@/api/getBookings';
 
 export default async function Main() {
   const t = await getTranslations('Timetable');
@@ -16,6 +19,7 @@ export default async function Main() {
   if (isNil(email)) {
     throw new Error('user has no email');
   }
+  const bookings = await getBookings();
   const isAdmin = accounts.filter(({ priviledge }) => priviledge === 'admin').map(({ email }) => email).includes(email);
   // const [tabIndex, setTabIndex] = useState(0);
   // function handleTabChange(_: unknown, newValue: number) {
@@ -57,6 +61,13 @@ export default async function Main() {
           <SignInButton />
         </div>
       </Card>
+      <Card variant='elevation' className='p-3 my-2'>
+        <BookingForm onSubmit={bookMachineTime} />
+      </Card>
+      <br />
+      <pre>
+        { JSON.stringify(bookings, null, 2) }
+      </pre>
       {/* <TagsEditList tags={['vasya', 'gena']} /> <br /> */}
       {/* <pre>{ JSON.stringify(accounts, null, 2) }</pre> */}
       <Timetable
