@@ -16,6 +16,8 @@
     "firstname": "firstname",
     "lastname": "lastname",
     "roomNumber": "room number",
-    "reserve": "reserve"
+    "reserve": "reserve",
+    "fromTime": "from time",
+    "upToTime": "up to time"
   }
 }

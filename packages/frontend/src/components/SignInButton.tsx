@@ -7,7 +7,7 @@ export default function SignInButton() {
   const t = useTranslations('Auth');
   return (
     <>
-      <Button variant='outlined' onClick={() => signIn("google", { callbackUrl: window.origin }, { prompt: 'login' })}>
+      <Button variant='contained' onClick={() => signIn("google", { callbackUrl: window.origin }, { prompt: 'login' })}>
         { t('changeAccount') }
       </Button>
     </>

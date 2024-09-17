@@ -16,6 +16,8 @@
     "firstname": "имя",
     "lastname": "фамилия",
     "roomNumber": "номер комнаты",
-    "reserve": "забронировать"
+    "reserve": "забронировать",
+    "fromTime": "начиная с",
+    "upToTime": "до"
   }
 }

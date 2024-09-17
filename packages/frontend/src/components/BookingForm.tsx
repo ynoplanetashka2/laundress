@@ -1,9 +1,11 @@
 'use client';
 
 import type { Booking, BookingSerializable } from "@/schemas/Booking";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { Button, FormLabel, Input } from "@mui/material";
 import { useTranslations } from "next-intl";
 import { useId, useState, type CSSProperties, type FormEvent } from "react";
+import { DateTime } from "luxon";
 
 type Props = {
   onSubmit?: (booking: Omit<Booking, 'bookedUserEmail'>) => void;
@@ -14,6 +16,9 @@ export function BookingForm({ style, onSubmit }: Props) {
   const t = useTranslations('Booking');
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
+  const [fromTime, setFromTime] = useState(DateTime.now().plus({ minutes: 5 }));
+  const DEFAULT_ADVANCE_HOURS = 1;
+  const [upToTime, setUpToTime] = useState(DateTime.now().plus({ minutes: 5 }).plus({ hour: DEFAULT_ADVANCE_HOURS }));
   const id = useId();
   const firstnameInputId = `firstname-input-${id}`;
   const lastnameInputId = `lastname-input-${id}`;
@@ -23,12 +28,18 @@ export function BookingForm({ style, onSubmit }: Props) {
       onSubmit({
         firstname,
         lastname,
-        fromTime: new Date(Date.now() + 1e4),
-        upToTime: new Date(Date.now() + 2e4),
+        fromTime: fromTime.toJSDate(),
+        upToTime: upToTime.toJSDate(),
         roomNumber: '666',
         washingMachineId: '1',
       })
     }
+  }
+  function handleFromTimeChange(newFromTime: DateTime<true>) {
+    if (newFromTime.toMillis() > upToTime.toMillis()) {
+      setUpToTime(newFromTime);
+    }
+    setFromTime(newFromTime);
   }
   return (
     <div style={{...style, position: 'relative' }}>
@@ -41,7 +52,23 @@ export function BookingForm({ style, onSubmit }: Props) {
           <FormLabel htmlFor={lastnameInputId}>{ t('lastname') }</FormLabel>
           <Input id={lastnameInputId} value={lastname} onChange={(e) => setLastname(e.target.value)} />
         </div>
-        <Button type="submit">{ t('reserve') }</Button>
+        <div className="flex justify-between my-3">
+          <DateTimePicker 
+            label={t('fromTime')}
+            value={fromTime}
+            onChange={(newFromTime) => newFromTime && handleFromTimeChange(newFromTime)}
+            minDateTime={DateTime.now()}
+            maxDateTime={DateTime.now().plus({ day: 1 })}
+          />
+          <DateTimePicker 
+            label={t('upToTime')}
+            value={upToTime}
+            onChange={(newUpToTime) => newUpToTime && setUpToTime(newUpToTime)}
+            minDateTime={fromTime}
+            maxDateTime={DateTime.now().plus({ day: 1 })}
+          />
+        </div>
+        <Button variant="contained" type="submit">{ t('reserve') }</Button>
       </form>
     </div>
   )
