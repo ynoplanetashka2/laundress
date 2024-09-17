@@ -8,7 +8,7 @@ import { Box, Card, Tab } from '@mui/material';
 import { useState } from 'react';
 import { type WashingMachine } from '@/schemas/WashingMachine';
 import Timetable from './Timetable';
-import { groupBy, mapValues, uniq } from 'lodash';
+import { groupBy, mapValues, uniq, values } from 'lodash';
 import { DateTime } from 'luxon';
 import { useTranslations } from 'next-intl';
 import { BookingForm } from './BookingForm';
@@ -33,6 +33,7 @@ const WEEKDAY_NUMBER_TO_NAME = {
   7: 'sunday',
 } as const;
 type WEEKDAY_NUMBER = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+const WEEKDAYS_NAMES = values(WEEKDAY_NUMBER_TO_NAME);
 
 function bookingsToTimetableParams(bookings: Booking[]) {
   function getWeekday(date: Date) {
@@ -80,6 +81,7 @@ export default function WashingMachineTablesTabs({
   }
   const [currentMachineId, setCurrentMachineId] = useState(machineIds.at(0)!);
   const t = useTranslations('Timetable');
+  const daysLabels = Object.fromEntries(WEEKDAYS_NAMES.map((weekdayName) => [weekdayName, t(weekdayName)]))
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
@@ -114,9 +116,10 @@ export default function WashingMachineTablesTabs({
                 }}
                 events={events}
                 daysOrder={daysOrder as string[]}
+                daysLabels={daysLabels}
                 timeColumnHeader={t('time')}
               />
-              <Card variant="elevation" className="mt-1 p-2">
+              <Card variant="elevation" className="mt-3 p-2">
                 <BookingForm
                   onSubmit={bookMachineTime}
                   washingMachineId={machineId}

@@ -1,20 +1,14 @@
-import Timetable from './Timetable';
-import TabContext from '@mui/lab/TabContext';
 import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
 import { getAccounts } from '@/api/getAccounts';
 import { getTranslations } from 'next-intl/server';
-import TagsEditList from './TagsEditList';
 import { getServerSession } from 'next-auth';
 import { isNil } from 'lodash';
-import { Box, Card } from '@mui/material';
-import { BookingForm } from './BookingForm';
-import { bookMachineTime } from '@/api/bookMachineTime';
+import { Card } from '@mui/material';
 import { getBookings } from '@/api/getBookings';
 import WashingMachineTablesTabs from './WashingMachineTablesTabs';
 import { getWashingMachines } from '@/api/getWashingMachines';
-import type { WashingMachine } from '@/schemas/WashingMachine';
 import type { Booking } from '@/schemas/Booking';
 
 export default async function Main() {
