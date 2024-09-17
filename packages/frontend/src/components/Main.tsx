@@ -35,25 +35,15 @@ export default async function Main() {
         width: '80vw',
         margin: '0 auto',
       }}
-      className="bg-cyan-100 px-10 pt-3"
+      className="bg-cyan-100 px-10 py-3"
     >
       <span>language: <LanguageSelect /></span> <br />
-      {/* <span> isAdmin: {String(isAdmin)} </span> <br /> */}
       <Card variant='elevation' className='w-min p-3 my-2'>
         <GoogleAccountInfo />
         <div className="flex justify-center my-2">
           <SignInButton />
         </div>
       </Card>
-      <Card variant='elevation' className='p-3 my-2'>
-        <BookingForm onSubmit={bookMachineTime} washingMachineId='1' />
-      </Card>
-      <br />
-      <pre>
-        { JSON.stringify(bookings, null, 2) }
-      </pre>
-      {/* <TagsEditList tags={['vasya', 'gena']} /> <br /> */}
-      {/* <pre>{ JSON.stringify(accounts, null, 2) }</pre> */}
       <WashingMachineTablesTabs machineBookings={groupedBookings} washingMachines={washingMachines} />
     </div>
   );

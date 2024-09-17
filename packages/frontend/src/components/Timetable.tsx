@@ -49,7 +49,7 @@ function computeProportionsForEvents(minTime: number, maxTime: number, timeValue
   return result.map(normalize);
 }
 
-export default function TimeTable<DayLabel extends string>({ style, events, daysOrder, timeColumnHeader = 'TIME' }: Props<DayLabel>) {
+export default function Timetable<DayLabel extends string>({ style, events, daysOrder, timeColumnHeader = 'TIME' }: Props<DayLabel>) {
   const MIN_TIME = 7
   const MAX_TIME = 18
   const MIN_DATE_TIME = DateTime.fromObject({ hour: MIN_TIME, minute: 0, second: 0, millisecond: 0, }, { locale: 'ru-RU', zone: 'UTC+3' })

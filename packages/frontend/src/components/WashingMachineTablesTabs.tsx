@@ -4,7 +4,7 @@ import type { Booking } from '@/schemas/Booking';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import TabList from '@mui/lab/TabList';
-import { Box, Tab } from '@mui/material';
+import { Box, Card, Tab } from '@mui/material';
 import { useState } from 'react';
 import {
   WashingMachineSchema,
@@ -14,6 +14,8 @@ import Timetable from './Timetable';
 import { groupBy, mapValues, uniq } from 'lodash';
 import { DateTime } from 'luxon';
 import { useTranslations } from 'next-intl';
+import { BookingForm } from './BookingForm';
+import { bookMachineTime } from '@/api/bookMachineTime';
 
 type MachinesBookings = {
   [machineId in string]: Booking[];
@@ -101,17 +103,21 @@ export default function WashingMachineTablesTabs({
           const bookings = machineBookings[machineId];
           const { daysOrder, events } = bookingsToTimetableParams(bookings);
           return (
-            <TabPanel value={machineId} key={machineId}>
-              <Timetable
-                style={{
-                  height: '500px',
-                  width: '100%',
-                }}
-                events={events}
-                daysOrder={daysOrder as string[]}
-                timeColumnHeader={t('time')}
-              />
-            </TabPanel>
+            <div>
+              <TabPanel value={machineId} key={machineId}>
+                <Timetable
+                  style={{
+                    width: '100%',
+                  }}
+                  events={events}
+                  daysOrder={daysOrder as string[]}
+                  timeColumnHeader={t('time')}
+                />
+              </TabPanel>
+              <Card variant="elevation" className="mt-1 p-2">
+                <BookingForm onSubmit={bookMachineTime} washingMachineId={machineId} />
+              </Card>
+            </div>
           );
         })}
       </TabContext>
