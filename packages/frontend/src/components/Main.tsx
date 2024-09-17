@@ -62,7 +62,7 @@ export default async function Main() {
         </div>
       </Card>
       <Card variant='elevation' className='p-3 my-2'>
-        <BookingForm onSubmit={bookMachineTime} />
+        <BookingForm onSubmit={bookMachineTime} washingMachineId='1' />
       </Card>
       <br />
       <pre>

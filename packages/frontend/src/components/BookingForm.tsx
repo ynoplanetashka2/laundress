@@ -9,19 +9,22 @@ import { DateTime } from "luxon";
 
 type Props = {
   onSubmit?: (booking: Omit<Booking, 'bookedUserEmail'>) => void;
+  washingMachineId: string;
   style?: CSSProperties;
 }
 
-export function BookingForm({ style, onSubmit }: Props) {
+export function BookingForm({ style, onSubmit, washingMachineId, }: Props) {
   const t = useTranslations('Booking');
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [fromTime, setFromTime] = useState(DateTime.now().plus({ minutes: 5 }));
   const DEFAULT_ADVANCE_HOURS = 1;
   const [upToTime, setUpToTime] = useState(DateTime.now().plus({ minutes: 5 }).plus({ hour: DEFAULT_ADVANCE_HOURS }));
+  const [roomNumber, setRoomNumber] = useState('000');
   const id = useId();
   const firstnameInputId = `firstname-input-${id}`;
   const lastnameInputId = `lastname-input-${id}`;
+  const roomNumberInputId = `room-number-input-${id}`;
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (onSubmit) {
@@ -30,8 +33,8 @@ export function BookingForm({ style, onSubmit }: Props) {
         lastname,
         fromTime: fromTime.toJSDate(),
         upToTime: upToTime.toJSDate(),
-        roomNumber: '666',
-        washingMachineId: '1',
+        roomNumber,
+        washingMachineId: washingMachineId,
       })
     }
   }
@@ -44,13 +47,17 @@ export function BookingForm({ style, onSubmit }: Props) {
   return (
     <div style={{...style, position: 'relative' }}>
       <form className='top-0 left-0 right-0 bottom-0 relative' onSubmit={handleSubmit}>
-        <div className="flex justify-between">
+        <div className="flex justify-between m-1">
           <FormLabel htmlFor={firstnameInputId}>{ t('firstname') }</FormLabel>
           <Input id={firstnameInputId} value={firstname} onChange={(e) => setFirstname(e.target.value)} />
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between m-1">
           <FormLabel htmlFor={lastnameInputId}>{ t('lastname') }</FormLabel>
           <Input id={lastnameInputId} value={lastname} onChange={(e) => setLastname(e.target.value)} />
+        </div>
+        <div className="flex justify-between m-1">
+          <FormLabel htmlFor={roomNumberInputId}>{ t('roomNumber') }</FormLabel>
+          <Input id={roomNumberInputId} value={roomNumber} onChange={(e) => setRoomNumber(e.target.value)} />
         </div>
         <div className="flex justify-between my-3">
           <DateTimePicker 
