@@ -13,8 +13,8 @@
     "sunday": "sunday"
   },
   "Booking": {
-    "firstname": "firstname",
-    "lastname": "lastname",
+    "firstname": "first name",
+    "lastname": "last name",
     "roomNumber": "room number",
     "reserve": "reserve",
     "fromTime": "from time",
