@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { DateTime, Zone, type WeekdayNumbers } from "luxon";
 import type React from "react";
 
 type Event = {
@@ -20,6 +20,10 @@ type Props<DayLabel extends string> = {
 
 function range(upTo: number): number[] {
   return new Array(upTo).fill(void 0).map((_, index) => index);
+}
+
+function getWeekday(date: Date): WeekdayNumbers {
+  return DateTime.fromJSDate(date, { zone: 'UTC+3' }).weekday as WeekdayNumbers;
 }
 
 function computeProportionsForEvents(minTime: number, maxTime: number, timeValues: [number, number][]): number[] {
@@ -48,8 +52,8 @@ function computeProportionsForEvents(minTime: number, maxTime: number, timeValue
 export default function TimeTable<DayLabel extends string>({ style, events, daysOrder, timeColumnHeader = 'TIME' }: Props<DayLabel>) {
   const MIN_TIME = 7
   const MAX_TIME = 18
-  const MIN_DATE_TIME = DateTime.local().set({ hour: MIN_TIME, minute: 0, second: 0, millisecond: 0, })
-  const MAX_DATE_TIME = DateTime.local().set({ hour: MAX_TIME, minute: 0, second: 0, millisecond: 0, })
+  const MIN_DATE_TIME = DateTime.fromObject({ hour: MIN_TIME, minute: 0, second: 0, millisecond: 0, }, { locale: 'ru-RU', zone: 'UTC+3' })
+  const MAX_DATE_TIME = DateTime.fromObject({ hour: MAX_TIME, minute: 0, second: 0, millisecond: 0, }, { locale: 'ru-RU', zone: 'UTC+3' })
   const columnsCount = daysOrder.length + 1;
   const rowsCount = (MAX_TIME - MIN_TIME) * 2 + 1;
   const timeValues = range(rowsCount - 1).map((shiftValue) => {
@@ -84,7 +88,7 @@ export default function TimeTable<DayLabel extends string>({ style, events, days
             }}
             className="border-r-2 border-slate-800 text-center"
           >
-            { timeValue.toFormat('hh:mm') }
+            { timeValue.setLocale('ru').toLocaleString(DateTime.TIME_SIMPLE) }
           </div>
         ))
       }
@@ -134,9 +138,10 @@ export default function TimeTable<DayLabel extends string>({ style, events, days
               </div>
             )
           }
+          const weekday = getWeekday((todaysEvents.at(0)!).startTime);
           const gridTemplateRowsProportions = computeProportionsForEvents(
-            MIN_DATE_TIME.toMillis(),
-            MAX_DATE_TIME.toMillis(),
+            MIN_DATE_TIME.set({ weekday }).toMillis(),
+            MAX_DATE_TIME.set({ weekday }).toMillis(),
             todaysEvents.map(({ startTime, endTime }) => [startTime.getTime(), endTime.getTime()])
           );
           return (
@@ -164,8 +169,8 @@ export default function TimeTable<DayLabel extends string>({ style, events, days
                     <span>{ label }</span>
                     <br />
                     <span>
-                      { DateTime.fromJSDate(startTime).toFormat('hh:mm') } -
-                      { DateTime.fromJSDate(endTime).toFormat('hh:mm') }
+                      { DateTime.fromJSDate(startTime, { zone: 'UTC+3' }).setLocale('ru').toLocaleString(DateTime.TIME_SIMPLE) } -
+                      { DateTime.fromJSDate(endTime, { zone: 'UTC+3' }).setLocale('ru').toLocaleString(DateTime.TIME_SIMPLE) }
                     </span>
                   </div>
                 ))

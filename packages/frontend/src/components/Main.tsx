@@ -1,4 +1,5 @@
 import Timetable from './Timetable';
+import TabContext from '@mui/lab/TabContext';
 import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
@@ -7,10 +8,14 @@ import { getTranslations } from 'next-intl/server';
 import TagsEditList from './TagsEditList';
 import { getServerSession } from 'next-auth';
 import { isNil } from 'lodash';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { BookingForm } from './BookingForm';
 import { bookMachineTime } from '@/api/bookMachineTime';
 import { getBookings } from '@/api/getBookings';
+import WashingMachineTablesTabs from './WashingMachineTablesTabs';
+import { getWashingMachines } from '@/api/getWashingMachines';
+import type { WashingMachine } from '@/schemas/WashingMachine';
+import type { Booking } from '@/schemas/Booking';
 
 export default async function Main() {
   const t = await getTranslations('Timetable');
@@ -20,30 +25,9 @@ export default async function Main() {
     throw new Error('user has no email');
   }
   const bookings = await getBookings();
+  const washingMachines = await getWashingMachines();
+  const groupedBookings = { ...Object.groupBy(bookings, ({ washingMachineId }) => washingMachineId) as Record<string, Booking[]> };
   const isAdmin = accounts.filter(({ priviledge }) => priviledge === 'admin').map(({ email }) => email).includes(email);
-  // const [tabIndex, setTabIndex] = useState(0);
-  // function handleTabChange(_: unknown, newValue: number) {
-  //   setTabIndex(newValue);
-  // }
-  // function handleBookTime() {
-
-  // }
-  // return (
-  //   <>
-  //     <Button onClick={handleBookTime}/>
-  //     <Tabs value={tabIndex} onChange={handleTabChange} >
-  //       <Tab label="machine-1" />
-  //       <Tab label="machine-2" />
-  //     </Tabs>
-  //     {
-  //       tabIndex === 0 ? (
-  //         <Schedule name="vasya" />
-  //       ) : (
-  //         <Schedule name="sasha" />
-  //       )
-  //     }
-  //   </>
-  // );
   return (
     <div
       style={{
@@ -70,35 +54,7 @@ export default async function Main() {
       </pre>
       {/* <TagsEditList tags={['vasya', 'gena']} /> <br /> */}
       {/* <pre>{ JSON.stringify(accounts, null, 2) }</pre> */}
-      <Timetable
-        style={{
-          height: '500px',
-          width: '100%',
-        }}
-        events={{
-          [t('monday')]: [
-            {
-              startTime: new Date('2024-09-14T05:00:00.000Z'),
-              endTime: new Date('2024-09-14T06:30:00.000Z'),
-              label: 'sasha',
-            },
-            {
-              startTime: new Date('2024-09-14T06:45:00.000Z'),
-              endTime: new Date('2024-09-14T07:30:00.000Z'),
-              label: 'senya',
-            },
-          ],
-          [t('tuesday')]: [
-            {
-              startTime: new Date('2024-09-14T06:00:00.000Z'),
-              endTime: new Date('2024-09-14T08:00:00.000Z'),
-              label: 'vasya',
-            },
-          ],
-        }}
-        daysOrder={[t('monday'),t('tuesday')]}
-        timeColumnHeader={t('time')}
-      />
+      <WashingMachineTablesTabs machineBookings={groupedBookings} washingMachines={washingMachines} />
     </div>
   );
 }
