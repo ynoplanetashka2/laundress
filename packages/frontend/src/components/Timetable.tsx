@@ -1,7 +1,7 @@
 import { DateTime, Zone, type WeekdayNumbers } from "luxon";
 import type React from "react";
 
-type Event = {
+export type Event = {
   startTime: Date;
   endTime: Date;
   label: string;

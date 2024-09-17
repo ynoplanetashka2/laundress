@@ -6,10 +6,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import TabList from '@mui/lab/TabList';
 import { Box, Card, Tab } from '@mui/material';
 import { useState } from 'react';
-import {
-  WashingMachineSchema,
-  type WashingMachine,
-} from '@/schemas/WashingMachine';
+import { type WashingMachine } from '@/schemas/WashingMachine';
 import Timetable from './Timetable';
 import { groupBy, mapValues, uniq } from 'lodash';
 import { DateTime } from 'luxon';
@@ -77,7 +74,7 @@ export default function WashingMachineTablesTabs({
   machineBookings,
   washingMachines,
 }: Props) {
-  const machineIds = Object.keys(machineBookings);
+  const machineIds = washingMachines.map(({ _id: machineId }) => machineId);
   if (machineIds.length === 0) {
     throw new Error('can not have 0 washing machines');
   }
@@ -101,23 +98,31 @@ export default function WashingMachineTablesTabs({
         </Box>
         {washingMachines.map(({ _id: machineId }) => {
           const bookings = machineBookings[machineId];
-          const { daysOrder, events } = bookingsToTimetableParams(bookings);
+          const { daysOrder, events } =
+            bookings !== undefined
+              ? bookingsToTimetableParams(bookings)
+              : {
+                  daysOrder: [],
+                  events: {},
+                };
+
           return (
-            <div>
-              <TabPanel value={machineId} key={machineId}>
-                <Timetable
-                  style={{
-                    width: '100%',
-                  }}
-                  events={events}
-                  daysOrder={daysOrder as string[]}
-                  timeColumnHeader={t('time')}
-                />
-              </TabPanel>
+            <TabPanel value={machineId} key={machineId}>
+              <Timetable
+                style={{
+                  width: '100%',
+                }}
+                events={events}
+                daysOrder={daysOrder as string[]}
+                timeColumnHeader={t('time')}
+              />
               <Card variant="elevation" className="mt-1 p-2">
-                <BookingForm onSubmit={bookMachineTime} washingMachineId={machineId} />
+                <BookingForm
+                  onSubmit={bookMachineTime}
+                  washingMachineId={machineId}
+                />
               </Card>
-            </div>
+            </TabPanel>
           );
         })}
       </TabContext>

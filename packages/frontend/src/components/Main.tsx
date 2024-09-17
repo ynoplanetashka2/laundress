@@ -19,15 +19,26 @@ import type { Booking } from '@/schemas/Booking';
 
 export default async function Main() {
   const t = await getTranslations('Timetable');
-  const [session, accounts] = await Promise.all([await getServerSession(), await getAccounts()]);
+  const [session, accounts] = await Promise.all([
+    await getServerSession(),
+    await getAccounts(),
+  ]);
   const email = session?.user?.email;
   if (isNil(email)) {
     throw new Error('user has no email');
   }
   const bookings = await getBookings();
   const washingMachines = await getWashingMachines();
-  const groupedBookings = { ...Object.groupBy(bookings, ({ washingMachineId }) => washingMachineId) as Record<string, Booking[]> };
-  const isAdmin = accounts.filter(({ priviledge }) => priviledge === 'admin').map(({ email }) => email).includes(email);
+  const groupedBookings = {
+    ...(Object.groupBy(
+      bookings,
+      ({ washingMachineId }) => washingMachineId,
+    ) as Record<string, Booking[]>),
+  };
+  const isAdmin = accounts
+    .filter(({ priviledge }) => priviledge === 'admin')
+    .map(({ email }) => email)
+    .includes(email);
   return (
     <div
       style={{
@@ -37,14 +48,19 @@ export default async function Main() {
       }}
       className="bg-cyan-100 px-10 py-3"
     >
-      <span>language: <LanguageSelect /></span> <br />
-      <Card variant='elevation' className='w-min p-3 my-2'>
+      <div className="w-20">
+        <LanguageSelect />
+      </div>
+      <Card variant="elevation" className="w-min p-3 my-2 mx-auto">
         <GoogleAccountInfo />
         <div className="flex justify-center my-2">
           <SignInButton />
         </div>
       </Card>
-      <WashingMachineTablesTabs machineBookings={groupedBookings} washingMachines={washingMachines} />
+      <WashingMachineTablesTabs
+        machineBookings={groupedBookings}
+        washingMachines={washingMachines}
+      />
     </div>
   );
 }
