@@ -34,7 +34,7 @@ export default function GoogleAccountInfo() {
       <span> { email } <br /> { name } </span>
       {
         !isNil(image) 
-        ? <Image src={image} alt="Your account icon" width="100" height="100" style={{ borderRadius: '50%' }} className='mx-auto mt-2' />
+        ? <Image priority={false} src={image} alt="Your account icon" width="100" height="100" style={{ borderRadius: '50%' }} className='mx-auto mt-2' />
         : <span> no image </span>
       }
     </>
