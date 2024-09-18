@@ -20,6 +20,16 @@
     "fromTime": "начиная с",
     "upToTime": "до",
     "washingMachine": "стиральная машина",
-    "noBookings": "нет записей"
+    "noBookings": "нет записей",
+    "firstnameLengthError": "дллина имени должна быть от 1 до 20 символов",
+    "lastnameLengthError": "дллина фамилии должна быть от 1 до 20 символов",
+    "roomNumberError": "номер комнаты должен состоять из 3 цифр",
+    "bookInTooAdvanceError": "нельзя бронировать более чем за 24 часа",
+    "bookInThePastError": "нельзя бронировать прошедшее время",
+    "bookEndTimeLessThanBookStartTimeError": "верхняя граница времени бронирования не может быть меньше нижней границы",
+    "bookTooLongError": "нельзя бронировать более 5 часов",
+    "bookTooShortError": "нельзя бронировать менее чем на пол часа",
+    "bookTimeAlreadyReservedError": "выбранное время уже забронировано",
+    "bookInNotWorkingIntervalError": "нельзя бронировать на время не в интервале от 7:00 до 24:00"
   }
 }

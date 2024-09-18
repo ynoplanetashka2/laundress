@@ -20,6 +20,16 @@
     "fromTime": "from time",
     "upToTime": "up to time",
     "washingMachine": "washing machine",
-    "noBookings": "no bookings"
+    "noBookings": "no bookings",
+    "firstnameLengthError": "first name length should be in range from 1 up to 20",
+    "lastnameLengthError": "last name length should be in range from 1 up to 20",
+    "roomNumberError": "room number should contain 3 digits",
+    "bookInTooAdvanceError": "can not book in more than 24 hours advance",
+    "bookInThePastError": "can not book in the past",
+    "bookEndTimeLessThanBookStartTimeError": "booking end time can not be less than booking start time",
+    "bookTooLongError": "can not book more than 5 hours",
+    "bookTooShortError": "can not book for less than half an hour",
+    "bookTimeAlreadyReservedError": "the specified time inverval already reserved",
+    "bookInNotWorkingIntervalError": "can not book for time other than from 7:00 AM up to 12:00 PM (UTC+3)"
   }
 }
