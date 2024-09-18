@@ -4,7 +4,7 @@ import type { Booking } from '@/schemas/Booking';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
 import TabList from '@mui/lab/TabList';
-import { Box, Card, Tab } from '@mui/material';
+import { Box, Card, Tab, Typography } from '@mui/material';
 import { useState } from 'react';
 import { type WashingMachine } from '@/schemas/WashingMachine';
 import Timetable from './Timetable';
@@ -37,7 +37,9 @@ const WEEKDAY_NUMBER_TO_NAME = {
 type WEEKDAY_NUMBER = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 const WEEKDAYS_NAMES = values(WEEKDAY_NUMBER_TO_NAME);
 
-function bookingsToTimetableParams(bookings: Booking[], userEmail?: string | undefined
+function bookingsToTimetableParams(
+  bookings: Booking[],
+  userEmail?: string | undefined,
 ) {
   function getWeekday(date: Date) {
     return DateTime.fromJSDate(date, { zone: 'UTC+3' }).weekday;
@@ -47,7 +49,7 @@ function bookingsToTimetableParams(bookings: Booking[], userEmail?: string | und
     lastname: string,
     roomNumber: string,
   ) {
-    return `${lastname} ${firstname}\n ${roomNumber}`;
+    return `${lastname} ${firstname} ${roomNumber}`;
   }
   const days = uniq(bookings.map(({ fromTime }) => getWeekday(fromTime)))
     .toSorted()
@@ -60,7 +62,15 @@ function bookingsToTimetableParams(bookings: Booking[], userEmail?: string | und
     ),
     (bookingsAtDay) => {
       return bookingsAtDay.map(
-        ({ fromTime, upToTime, firstname, lastname, roomNumber, bookedUserEmail, _id }) => ({
+        ({
+          fromTime,
+          upToTime,
+          firstname,
+          lastname,
+          roomNumber,
+          bookedUserEmail,
+          _id,
+        }) => ({
           startTime: fromTime,
           endTime: upToTime,
           label: generateLabel(firstname, lastname, roomNumber),
@@ -85,10 +95,16 @@ export default function WashingMachineTablesTabs({
     throw new Error('can not have 0 washing machines');
   }
   const [currentMachineId, setCurrentMachineId] = useState(machineIds.at(0)!);
-  const t = useTranslations('Timetable');
+  const translateTimetable = useTranslations('Timetable');
+  const translateBooking = useTranslations('Booking');
   const session = useSession();
   const userEmail = session.data?.user?.email;
-  const daysLabels = Object.fromEntries(WEEKDAYS_NAMES.map((weekdayName) => [weekdayName, t(weekdayName)]))
+  const daysLabels = Object.fromEntries(
+    WEEKDAYS_NAMES.map((weekdayName) => [
+      weekdayName,
+      translateTimetable(weekdayName),
+    ]),
+  );
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
@@ -100,7 +116,7 @@ export default function WashingMachineTablesTabs({
             }
           >
             {washingMachines.map(({ _id: machineId, label }) => (
-              <Tab key={machineId} label={label} value={machineId}/>
+              <Tab key={machineId} label={label} value={machineId} />
             ))}
           </TabList>
         </Box>
@@ -116,16 +132,22 @@ export default function WashingMachineTablesTabs({
 
           return (
             <TabPanel value={machineId} key={machineId}>
-              <Timetable
-                style={{
-                  width: '100%',
-                }}
-                events={events}
-                daysOrder={daysOrder as string[]}
-                daysLabels={daysLabels}
-                timeColumnHeader={t('time')}
-                onDeleteEventClick={deleteBooking}
-              />
+              {bookings !== undefined ? (
+                <Timetable
+                  style={{
+                    width: '100%',
+                  }}
+                  events={events}
+                  daysOrder={daysOrder as string[]}
+                  daysLabels={daysLabels}
+                  timeColumnHeader={translateTimetable('time')}
+                  onDeleteEventClick={deleteBooking}
+                />
+              ) : (
+                <Typography variant="body1">
+                  {translateBooking('noBookings')}
+                </Typography>
+              )}
               <Card variant="elevation" className="mt-3 p-2">
                 <BookingForm
                   onSubmit={bookMachineTime}

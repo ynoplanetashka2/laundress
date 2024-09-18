@@ -19,6 +19,7 @@
     "reserve": "забронировать",
     "fromTime": "начиная с",
     "upToTime": "до",
-    "washingMachine": "стиральная машина"
+    "washingMachine": "стиральная машина",
+    "noBookings": "нет записей"
   }
 }

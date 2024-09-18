@@ -19,6 +19,7 @@
     "reserve": "reserve",
     "fromTime": "from time",
     "upToTime": "up to time",
-    "washingMachine": "washing machine"
+    "washingMachine": "washing machine",
+    "noBookings": "no bookings"
   }
 }
