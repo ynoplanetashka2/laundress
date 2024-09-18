@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl';
 import { BookingForm } from './BookingForm';
 import { bookMachineTime } from '@/api/bookMachineTime';
 import { useSession } from 'next-auth/react';
+import { deleteBooking } from '@/api/deleteBooking';
 
 type MachinesBookings = {
   [machineId in string]: Booking[];
@@ -59,11 +60,12 @@ function bookingsToTimetableParams(bookings: Booking[], userEmail?: string | und
     ),
     (bookingsAtDay) => {
       return bookingsAtDay.map(
-        ({ fromTime, upToTime, firstname, lastname, roomNumber, bookedUserEmail }) => ({
+        ({ fromTime, upToTime, firstname, lastname, roomNumber, bookedUserEmail, _id }) => ({
           startTime: fromTime,
           endTime: upToTime,
           label: generateLabel(firstname, lastname, roomNumber),
-          isRemovable: userEmail === bookedUserEmail
+          isRemovable: userEmail === bookedUserEmail,
+          id: _id,
         }),
       );
     },
@@ -122,6 +124,7 @@ export default function WashingMachineTablesTabs({
                 daysOrder={daysOrder as string[]}
                 daysLabels={daysLabels}
                 timeColumnHeader={t('time')}
+                onDeleteEventClick={deleteBooking}
               />
               <Card variant="elevation" className="mt-3 p-2">
                 <BookingForm

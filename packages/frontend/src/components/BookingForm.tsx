@@ -8,7 +8,7 @@ import { useId, useState, type CSSProperties, type FormEvent } from "react";
 import { DateTime } from "luxon";
 
 type Props = {
-  onSubmit?: (booking: Omit<Booking, 'bookedUserEmail'>) => void;
+  onSubmit?: (booking: Omit<Booking, 'bookedUserEmail' | '_id'>) => void;
   washingMachineId: string;
   style?: CSSProperties;
 }

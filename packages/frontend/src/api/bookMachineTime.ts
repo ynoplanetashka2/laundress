@@ -5,11 +5,12 @@ import { getAccounts } from './getAccounts';
 import { BookingSchema, BookingSerializableSchema, type Booking, type BookingSerializable } from '@/schemas/Booking';
 import { getWashingMachines } from './getWashingMachines';
 import { executeMongo } from './executeMongo';
+import { randomUUID } from 'node:crypto';
 
 export async function bookMachineTime(
-  booking: Omit<Booking, 'bookedUserEmail'>
+  booking: Omit<Booking, 'bookedUserEmail' | '_id'>
 ) {
-  BookingSchema.omit({ bookedUserEmail: true })
+  BookingSchema.omit({ bookedUserEmail: true, _id: true, })
     .refine(
       ({ fromTime, upToTime }) => new Date(upToTime).getTime() >= new Date(fromTime).getTime(),
       {
@@ -62,7 +63,9 @@ export async function bookMachineTime(
 
   return await executeMongo(async (db) => {
     const collection = db.collection<Booking>('booking');
+    const uuid = randomUUID({ disableEntropyCache: true });
     return await collection.insertOne({
+      _id: uuid,
       washingMachineId,
       fromTime: new Date(fromTime),
       upToTime: new Date(upToTime),

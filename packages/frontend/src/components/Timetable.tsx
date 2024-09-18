@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { DateTime, Zone, type WeekdayNumbers } from 'luxon';
 import type React from 'react';
 
@@ -6,6 +7,7 @@ export type Event = {
   endTime: Date;
   isRemovable: boolean;
   label: string;
+  id: string;
 };
 
 type EventsMap<DayLabel extends string> = {
@@ -17,6 +19,7 @@ type Props<DayLabel extends string> = {
   daysOrder: DayLabel[];
   daysLabels?: Record<DayLabel, string>;
   timeColumnHeader?: string;
+  onDeleteEventClick?: (eventId: string) => void;
   style: React.CSSProperties;
 };
 
@@ -63,6 +66,7 @@ export default function Timetable<DayLabel extends string>({
   daysOrder,
   daysLabels,
   timeColumnHeader = 'TIME',
+  onDeleteEventClick,
 }: Props<DayLabel>) {
   const MIN_TIME = 7;
   const MAX_TIME = 18;
@@ -177,15 +181,18 @@ export default function Timetable<DayLabel extends string>({
                 .join(' '),
             }}
           >
-            {todaysEvents.map(({ label, startTime, endTime, isRemovable }, eventIndex) => (
+            {todaysEvents.map(({ label, startTime, endTime, isRemovable, id,  }, eventIndex) => (
               <div
-                key={`event-${eventIndex}`}
+                key={`event-${id}`}
                 style={{
                   gridColumn: 1,
                   gridRow: 2 * eventIndex + 2,
                 }}
-                className={`${isRemovable ? 'bg-green-300' : 'bg-orange-400' } bg-opacity-80 text-center overflow-y-auto`}
+                className={`${isRemovable ? 'bg-green-300' : 'bg-orange-400' } bg-opacity-80 text-center overflow-y-auto relative`}
               >
+                <button className="absolute top-0 right-1 cursor-pointer" onClick={() => onDeleteEventClick && onDeleteEventClick(id)}>
+                  <Typography variant='button'>X</Typography>
+                </button>
                 <span>{label}</span>
                 <br />
                 <span>

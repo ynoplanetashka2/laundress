@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const BookingSchema = z.object({
+  _id: z.string().min(1),
   fromTime: z.date(),
   upToTime: z.date(),
   firstname: z.string().max(30).min(2),
@@ -13,6 +14,7 @@ export const BookingSchema = z.object({
 export type Booking = z.infer<typeof BookingSchema>;
 
 export const BookingSerializableSchema =  z.object({
+  _id: z.string().min(1),
   fromTime: z.string().datetime(),
   upToTime: z.string().datetime(),
   firstname: z.string().max(30).min(2),
