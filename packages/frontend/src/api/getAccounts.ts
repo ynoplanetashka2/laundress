@@ -1,4 +1,4 @@
-import { Account, AccountSchema } from "@/schemas/account";
+import { AccountSchema, type Account } from "@/schemas/Account";
 import { executeMongo } from "./executeMongo";
 import { z } from "zod";
 
