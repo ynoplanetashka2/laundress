@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/LocalizationProvider';
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
+import { getServerSession } from 'next-auth';
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -31,6 +32,7 @@ export default async function RootLayout({
   params: { locale: string };
 }>) {
   const messages = await getMessages();
+  const session = await getServerSession();
 
   return (
     <html lang={locale}>
@@ -39,7 +41,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <AppRouterCacheProvider>
-            <ContextProviders>{children}</ContextProviders>
+            <ContextProviders session={session}>{children}</ContextProviders>
           </AppRouterCacheProvider>
         </NextIntlClientProvider>
       </body>
