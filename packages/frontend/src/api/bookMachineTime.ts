@@ -2,7 +2,7 @@
 
 import { getServerSession } from 'next-auth';
 import { getAccounts } from './getAccounts';
-import { BookingSchema, BookingSerializableSchema, type Booking, type BookingSerializable } from '@/schemas/Booking';
+import { BookingSchema, type Booking } from '@/schemas/Booking';
 import { getWashingMachines } from './getWashingMachines';
 import { executeMongo } from './executeMongo';
 import { randomUUID } from 'node:crypto';

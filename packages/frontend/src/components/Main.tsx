@@ -2,7 +2,6 @@ import SignInButton from './SignInButton';
 import GoogleAccountInfo from './GoogleAccountInfo';
 import LanguageSelect from './LanguageSelect';
 import { getAccounts } from '@/api/getAccounts';
-import { getTranslations } from 'next-intl/server';
 import { getServerSession } from 'next-auth';
 import { isNil } from 'lodash';
 import { Card } from '@mui/material';
@@ -12,7 +11,6 @@ import { getWashingMachines } from '@/api/getWashingMachines';
 import type { Booking } from '@/schemas/Booking';
 
 export default async function Main() {
-  const t = await getTranslations('Timetable');
   const [session, accounts] = await Promise.all([
     await getServerSession(),
     await getAccounts(),
@@ -29,6 +27,7 @@ export default async function Main() {
       ({ washingMachineId }) => washingMachineId,
     ) as Record<string, Booking[]>),
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isAdmin = accounts
     .filter(({ priviledge }) => priviledge === 'admin')
     .map(({ email }) => email)

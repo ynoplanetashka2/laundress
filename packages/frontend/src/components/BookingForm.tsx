@@ -1,13 +1,12 @@
 'use client';
 
-import type { Booking, BookingSerializable } from '@/schemas/Booking';
+import type { Booking } from '@/schemas/Booking';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { Button, FormLabel, Input, Typography } from '@mui/material';
 import { useTranslations } from 'next-intl';
 import { useId, useState, type CSSProperties, type FormEvent } from 'react';
 import { DateTime } from 'luxon';
 import { inRange } from 'lodash';
-import { isStringNumber } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
 
 type Props = {
   onSubmit?: (booking: Omit<Booking, 'bookedUserEmail' | '_id'>) => void;
