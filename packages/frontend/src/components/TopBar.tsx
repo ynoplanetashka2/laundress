@@ -1,6 +1,5 @@
 import { AppBar, Toolbar, Box, Avatar } from '@mui/material';
 import LanguageSelect from './LanguageSelect';
-import { isNil } from 'lodash';
 
 type Props = {
   avatarSrc?: string | undefined;

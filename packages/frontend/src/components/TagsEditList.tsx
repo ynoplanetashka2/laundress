@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Button, FormControl, FormHelperText, FormLabel, TextareaAutosize } from "@mui/material";
-import { useId, useRef, type ChangeEvent, type CSSProperties, type FormEvent } from "react";
+import { useId, useRef, type FormEvent } from "react";
 
 type Props = {
   tags: string[];
