@@ -37,7 +37,7 @@ function computeProportionsForEvents(
   timeValues: [number, number][],
 ): number[] {
   if (timeValues.length === 0) {
-    throw new TypeError('time spans can not be empty');
+    return [1];
   }
   const span = maxTime - minTime;
   const result: number[] = [];

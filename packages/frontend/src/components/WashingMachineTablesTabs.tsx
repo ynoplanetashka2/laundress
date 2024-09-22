@@ -91,10 +91,7 @@ export default function WashingMachineTablesTabs({
   washingMachines,
 }: Props) {
   const machineIds = washingMachines.map(({ _id: machineId }) => machineId);
-  if (machineIds.length === 0) {
-    throw new Error('can not have 0 washing machines');
-  }
-  const [currentMachineId, setCurrentMachineId] = useState(machineIds.at(0)!);
+  const [currentMachineId, setCurrentMachineId] = useState(machineIds.at(0) ?? null);
   const translateTimetable = useTranslations('Timetable');
   const translateBooking = useTranslations('Booking');
   const session = useSession();
@@ -105,6 +102,14 @@ export default function WashingMachineTablesTabs({
       translateTimetable(weekdayName),
     ]),
   );
+
+  if (machineIds.length === 0 || currentMachineId === null) {
+    return (
+      <Box>
+        <Typography variant='body1'>no washing machines yet</Typography>
+      </Box>
+    )
+  }
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
