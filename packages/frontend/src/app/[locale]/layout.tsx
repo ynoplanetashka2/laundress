@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/authOptions';
+import { Box } from '@mui/material';
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -41,7 +42,22 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <AppRouterCacheProvider>
-            <ContextProviders session={session}>{children}</ContextProviders>
+            <ContextProviders session={session}>
+              <Box
+                sx={{
+                  maxWidth: '800px',
+                  width: {
+                    md: '80vw',
+                    sm: '100vw',
+                  },
+                  margin: '0 auto',
+                  minHeight: '100vh',
+                }}
+                className="bg-cyan-100 px-10 py-3"
+              >
+                {children}
+              </Box>
+            </ContextProviders>
           </AppRouterCacheProvider>
         </NextIntlClientProvider>
       </body>
