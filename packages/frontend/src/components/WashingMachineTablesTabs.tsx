@@ -52,9 +52,14 @@ function bookingsToTimetableParams(
   ) {
     return `${lastname} ${firstname} ${roomNumber}`;
   }
-  const days = uniq(bookings.map(({ fromTime }) => getWeekday(fromTime)))
-    .toSorted()
-    .map((dayNumber) => WEEKDAY_NUMBER_TO_NAME[dayNumber as WEEKDAY_NUMBER]);
+  const days = uniq(
+    bookings
+      .toSorted(
+        ({ fromTime: fromTime1 }, { fromTime: fromTime2 }) =>
+          fromTime1.getTime() - fromTime2.getTime(),
+      )
+      .map(({ fromTime }) => getWeekday(fromTime)),
+  ).map((dayNumber) => WEEKDAY_NUMBER_TO_NAME[dayNumber as WEEKDAY_NUMBER]);
   const events = mapValues(
     groupBy(
       bookings,
@@ -92,7 +97,9 @@ export default function WashingMachineTablesTabs({
   washingMachines,
 }: Props) {
   const machineIds = washingMachines.map(({ _id: machineId }) => machineId);
-  const [currentMachineId, setCurrentMachineId] = useState(machineIds.at(0) ?? null);
+  const [currentMachineId, setCurrentMachineId] = useState(
+    machineIds.at(0) ?? null,
+  );
   const translateTimetable = useTranslations('Timetable');
   const translateBooking = useTranslations('Booking');
   const session = useSession();
@@ -108,9 +115,9 @@ export default function WashingMachineTablesTabs({
   if (machineIds.length === 0 || currentMachineId === null) {
     return (
       <Box>
-        <Typography variant='body1'>no washing machines yet</Typography>
+        <Typography variant="body1">no washing machines yet</Typography>
       </Box>
-    )
+    );
   }
 
   return (

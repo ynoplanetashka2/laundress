@@ -74,10 +74,6 @@ export default function Timetable<DayLabel extends string>({
     { hour: MIN_TIME, minute: 0, second: 0, millisecond: 0 },
     { locale: 'ru-RU', zone: 'UTC+3' },
   );
-  const MAX_DATE_TIME = DateTime.fromObject(
-    { hour: 23, minute: 59, second: 59, millisecond: 999 },
-    { locale: 'ru-RU', zone: 'UTC+3' },
-  );
   const columnsCount = daysOrder.length + 1;
   const rowsCount = (MAX_TIME - MIN_TIME) * 2 + 1;
   const timeValues = range(rowsCount - 1).map((shiftValue) => {
@@ -158,10 +154,11 @@ export default function Timetable<DayLabel extends string>({
             </div>
           );
         }
-        const weekday = getWeekday(todaysEvents.at(0)!.startTime);
+        const theEvent = todaysEvents.at(0)!;
+        const theStartTime = DateTime.fromJSDate(theEvent.startTime).setZone('UTC+3');
         const gridTemplateRowsProportions = computeProportionsForEvents(
-          MIN_DATE_TIME.set({ weekday }).toMillis(),
-          MAX_DATE_TIME.set({ weekday }).toMillis(),
+          theStartTime.set({ hour: 7, minute: 0, second: 0, millisecond: 0, }).toMillis(),
+          theStartTime.set({ hour: 23, minute: 59, second: 59, millisecond: 999, }).toMillis(),
           todaysEvents.map(({ startTime, endTime }) => [
             startTime.getTime(),
             endTime.getTime(),
