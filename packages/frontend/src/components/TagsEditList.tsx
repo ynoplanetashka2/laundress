@@ -6,7 +6,6 @@ import { useId, useRef, type ChangeEvent, type CSSProperties, type FormEvent } f
 type Props = {
   tags: string[];
   label: string;
-  onChange?: (newTags: string[]) => void;
   onSave?: (tags: string[]) => void;
 }
 
