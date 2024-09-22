@@ -6,15 +6,30 @@ import { BookingSchema, type Booking } from '@/schemas/Booking';
 import { getWashingMachines } from './getWashingMachines';
 import { executeMongo } from './executeMongo';
 import { randomUUID } from 'node:crypto';
+import { DateTime } from 'luxon';
+import { inRange } from 'lodash';
+import { getBookings } from './getBookings';
 
 export async function bookMachineTime(
-  booking: Omit<Booking, 'bookedUserEmail' | '_id' | 'expireAt'>
-): Promise<{ error?: string; }> {
-  const parseResult = BookingSchema.omit({ bookedUserEmail: true, _id: true, expireAt: true, })
+  booking: Omit<Booking, 'bookedUserEmail' | '_id' | 'expireAt'>,
+): Promise<{ error?: string }> {
+  const parseResult = BookingSchema.omit({
+    bookedUserEmail: true,
+    _id: true,
+    expireAt: true,
+  })
     .refine(
-      ({ fromTime, upToTime }) => new Date(upToTime).getTime() >= new Date(fromTime).getTime(),
+      ({ fromTime, upToTime }) =>
+        new Date(upToTime).getTime() >= new Date(fromTime).getTime(),
       {
         message: 'upToTime can not be less than fromTime',
+      },
+    )
+    .refine(
+      ({ roomNumber }) =>
+        roomNumber.split('').every((digit) => !isNaN(Number(digit))),
+      {
+        message: 'wrong room number',
       },
     )
     .safeParse(booking);
@@ -53,15 +68,61 @@ export async function bookMachineTime(
   const ONE_DAY = 24 * ONE_HOUR;
   const MAX_BOOK_IN_ADVANCE = ONE_DAY;
   const MAX_BOOK_DURATION = 5 * ONE_HOUR;
-  const now = new Date();
-  if (now.getTime() > new Date(fromTime).getTime()) {
-    return { error: 'can not book for the past' };
+  const MIN_BOOK_DURATION = 0.5 * ONE_HOUR;
+  const fromLuxonTime = DateTime.fromJSDate(fromTime);
+  const upToLuxonTime = DateTime.fromJSDate(upToTime);
+  if (upToLuxonTime.toMillis() < fromLuxonTime.toMillis()) {
+    return { error: 'bookEndTimeLessThanBookStartTimeError' };
   }
-  if (now.getTime() + MAX_BOOK_IN_ADVANCE < new Date(upToTime).getTime()) {
-    return { error: 'can not book more than 24 hours in advance' };
+  if (upToLuxonTime.diff(fromLuxonTime).toMillis() <= MIN_BOOK_DURATION) {
+    return { error: 'bookTooShortError' };
   }
-  if (new Date(upToTime).getTime() - new Date(fromTime).getTime() > MAX_BOOK_DURATION) {
-    return { error: 'can not book for more than 5 hours' };
+  if (upToLuxonTime.diff(fromLuxonTime).toMillis() > MAX_BOOK_DURATION) {
+    return { error: 'bookTooLongError' };
+  }
+  if (upToLuxonTime.diffNow().toMillis() > MAX_BOOK_IN_ADVANCE) {
+    return { error: 'bookInTooAdvanceError' };
+  }
+  if (fromLuxonTime.toMillis() < DateTime.now().toMillis()) {
+    return { error: 'bookInThePastError' };
+  }
+  if (
+    inRange(fromLuxonTime.setZone('UTC+3').hour, 0, 7) ||
+    inRange(upToLuxonTime.setZone('UTC+3').hour, 0, 7)
+  ) {
+    return { error: 'bookInNotWorkingIntervalError' };
+  }
+  
+  const bookings = await getBookings();
+  const bookingsForMachine = bookings.filter(({ washingMachineId: machineId }) => washingMachineId === machineId);
+  const sortedBookings = bookingsForMachine.toSorted(({ fromTime: fromTime1, }, { fromTime: fromTime2, }) => fromTime1.getTime() - fromTime2.getTime());
+  const correspondingToNewBookingIndex = sortedBookings.findIndex(({ fromTime: bookingFromTime }) => bookingFromTime.getTime() > fromTime.getTime());
+  let isTimeAlreadyReserved = false;
+  timeNotReservedLabel: { 
+    if (sortedBookings.length === 0) {
+      break timeNotReservedLabel;
+    }
+    if (correspondingToNewBookingIndex !== -1) {
+      if (upToTime.getTime() > sortedBookings[correspondingToNewBookingIndex].fromTime.getTime()) {
+        isTimeAlreadyReserved = true;
+        break timeNotReservedLabel;
+      }
+      if (correspondingToNewBookingIndex > 0) {
+        if (sortedBookings[correspondingToNewBookingIndex - 1].upToTime.getTime() > fromTime.getTime()) {
+          isTimeAlreadyReserved = true;
+          break timeNotReservedLabel;
+        }
+      }
+    }
+    else {
+      if (sortedBookings[sortedBookings.length - 1].upToTime.getTime() > fromTime.getTime()) {
+        isTimeAlreadyReserved = true;
+        break timeNotReservedLabel;
+      }
+    }
+  }
+  if (isTimeAlreadyReserved) {
+    return { error: 'bookTimeAlreadyReservedError' };
   }
 
   return await executeMongo(async (db) => {
