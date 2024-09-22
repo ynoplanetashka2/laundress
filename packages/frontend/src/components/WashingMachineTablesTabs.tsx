@@ -24,6 +24,7 @@ type MachinesBookings = {
 type Props = {
   machineBookings: MachinesBookings;
   washingMachines: WashingMachine[];
+  isAdminView?: boolean | undefined;
 };
 
 const WEEKDAY_NUMBER_TO_NAME = {
@@ -41,6 +42,7 @@ const WEEKDAYS_NAMES = values(WEEKDAY_NUMBER_TO_NAME);
 function bookingsToTimetableParams(
   bookings: Booking[],
   userEmail?: string | undefined,
+  isAdminView?: boolean | undefined,
 ) {
   function getWeekday(date: Date) {
     return DateTime.fromJSDate(date, { zone: 'UTC+3' }).weekday;
@@ -80,7 +82,7 @@ function bookingsToTimetableParams(
           startTime: fromTime,
           endTime: upToTime,
           label: generateLabel(firstname, lastname, roomNumber),
-          isRemovable: userEmail === bookedUserEmail,
+          isRemovable: Boolean(userEmail === bookedUserEmail || isAdminView),
           id: _id,
         }),
       );
@@ -95,6 +97,7 @@ function bookingsToTimetableParams(
 export default function WashingMachineTablesTabs({
   machineBookings,
   washingMachines,
+  isAdminView = false,
 }: Props) {
   const machineIds = washingMachines.map(({ _id: machineId }) => machineId);
   const [currentMachineId, setCurrentMachineId] = useState(

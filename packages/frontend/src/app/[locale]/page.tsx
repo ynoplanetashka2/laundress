@@ -100,6 +100,7 @@ export default async function Home() {
       <WashingMachineTablesTabs
         machineBookings={groupedBookings}
         washingMachines={washingMachines}
+        isAdminView={isAdmin}
       />
       {isAdmin ? (
         <AdminTools
