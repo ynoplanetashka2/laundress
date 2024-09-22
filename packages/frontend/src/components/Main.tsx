@@ -4,7 +4,7 @@ import LanguageSelect from './LanguageSelect';
 import { getAccounts } from '@/api/getAccounts';
 import { getServerSession } from 'next-auth';
 import { isNil } from 'lodash';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { getBookings } from '@/api/getBookings';
 import WashingMachineTablesTabs from './WashingMachineTablesTabs';
 import { getWashingMachines } from '@/api/getWashingMachines';
@@ -33,10 +33,13 @@ export default async function Main() {
     .map(({ email }) => email)
     .includes(email);
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         maxWidth: '800px',
-        width: '80vw',
+        width: {
+          md: '80vw',
+          sm: '100vw',
+        },
         margin: '0 auto',
       }}
       className="bg-cyan-100 px-10 py-3"
@@ -54,6 +57,6 @@ export default async function Main() {
         machineBookings={groupedBookings}
         washingMachines={washingMachines}
       />
-    </div>
+    </Box>
   );
 }
