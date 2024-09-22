@@ -12,10 +12,11 @@ import { useTranslations } from 'next-intl';
 type Props = {
   onSubmit?: (booking: Omit<Booking, 'bookedUserEmail' | '_id' | 'expireAt'>) => Promise<{ error?: string; }>;
   washingMachineId: string;
+  washingMachineLabel: string;
   style?: CSSProperties;
 };
 
-export function BookingForm({ style, onSubmit, washingMachineId }: Props) {
+export function BookingForm({ style, onSubmit, washingMachineId, washingMachineLabel }: Props) {
   const t = useTranslations('Booking');
   const router = useRouter();
   const [firstname, setFirstname] = useState('');

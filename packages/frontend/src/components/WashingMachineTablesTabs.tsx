@@ -127,7 +127,7 @@ export default function WashingMachineTablesTabs({
             ))}
           </TabList>
         </Box>
-        {washingMachines.map(({ _id: machineId }) => {
+        {washingMachines.map(({ _id: machineId, label: machineLabel }) => {
           const bookings = machineBookings[machineId];
           const { daysOrder, events } =
             bookings !== undefined
@@ -162,6 +162,7 @@ export default function WashingMachineTablesTabs({
                 <BookingForm
                   onSubmit={bookMachineTime}
                   washingMachineId={machineId}
+                  washingMachineLabel={machineLabel}
                 />
               </Card>
             </TabPanel>
