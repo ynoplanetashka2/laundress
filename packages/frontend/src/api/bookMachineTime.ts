@@ -8,9 +8,9 @@ import { executeMongo } from './executeMongo';
 import { randomUUID } from 'node:crypto';
 
 export async function bookMachineTime(
-  booking: Omit<Booking, 'bookedUserEmail' | '_id'>
+  booking: Omit<Booking, 'bookedUserEmail' | '_id' | 'expireAt'>
 ): Promise<{ error?: string; }> {
-  const parseResult = BookingSchema.omit({ bookedUserEmail: true, _id: true, })
+  const parseResult = BookingSchema.omit({ bookedUserEmail: true, _id: true, expireAt: true, })
     .refine(
       ({ fromTime, upToTime }) => new Date(upToTime).getTime() >= new Date(fromTime).getTime(),
       {
@@ -67,6 +67,7 @@ export async function bookMachineTime(
   return await executeMongo(async (db) => {
     const collection = db.collection<Booking>('booking');
     const uuid = randomUUID({ disableEntropyCache: true });
+    const ONE_DAY = 24 * 60 * 60 * 1_000;
     await collection.insertOne({
       _id: uuid,
       washingMachineId,
@@ -76,6 +77,7 @@ export async function bookMachineTime(
       lastname: lastName,
       roomNumber,
       bookedUserEmail: email,
+      expireAt: new Date(new Date(upToTime).getTime() + ONE_DAY),
     });
     return {};
   });

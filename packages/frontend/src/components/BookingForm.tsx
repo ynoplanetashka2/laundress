@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 type Props = {
-  onSubmit?: (booking: Omit<Booking, 'bookedUserEmail' | '_id'>) => Promise<{ error?: string; }>;
+  onSubmit?: (booking: Omit<Booking, 'bookedUserEmail' | '_id' | 'expireAt'>) => Promise<{ error?: string; }>;
   washingMachineId: string;
   style?: CSSProperties;
 };

@@ -9,6 +9,7 @@ export const BookingSchema = z.object({
   roomNumber: z.string().length(3, 'room number should contain exactly 3 digits'),
   washingMachineId: z.string().min(1),
   bookedUserEmail: z.string().email().min(4),
+  expireAt: z.date(),
 });
 
 export type Booking = z.infer<typeof BookingSchema>;
@@ -22,6 +23,7 @@ export const BookingSerializableSchema =  z.object({
   roomNumber: z.string().length(3, 'room number should contain exactly 3 digits'),
   washingMachineId: z.string().min(1),
   bookedUserEmail: z.string().email().min(4),
+  expireAt: z.string().datetime(),
 });
 
 export type BookingSerializable = z.infer<typeof BookingSerializableSchema>;
