@@ -127,7 +127,7 @@ export async function bookMachineTime(
 
   return await executeMongo(async (db) => {
     const collection = db.collection<Booking>('booking');
-    const uuid = randomUUID({ disableEntropyCache: true });
+    const uuid = randomUUID();
     const ONE_DAY = 24 * 60 * 60 * 1_000;
     await collection.insertOne({
       _id: uuid,
