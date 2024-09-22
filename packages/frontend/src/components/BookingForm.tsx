@@ -97,7 +97,7 @@ export function BookingForm({ style, onSubmit, washingMachineId, washingMachineL
         fromTime: fromTime.toJSDate(),
         upToTime: upToTime.toJSDate(),
         roomNumber,
-        washingMachineId: washingMachineId,
+        washingMachineId,
       });
       if (error) {
         if (t.raw(error) !== `Booking.${error}`) {
@@ -126,7 +126,7 @@ export function BookingForm({ style, onSubmit, washingMachineId, washingMachineL
           <FormLabel htmlFor={washingMachineInputId}>
             {t('washingMachine')}
           </FormLabel>
-          <Input id={washingMachineInputId} value={washingMachineId} disabled />
+          <Input id={washingMachineInputId} value={washingMachineLabel} disabled />
         </div>
         <div className="flex justify-between m-1">
           <FormLabel htmlFor={firstnameInputId}>{t('firstname')}</FormLabel>
