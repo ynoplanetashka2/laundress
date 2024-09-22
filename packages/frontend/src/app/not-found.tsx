@@ -3,7 +3,7 @@ export default function NotFound() {
     <html>
       <body>
         <h2>
-          404 Resource not found
+          Resource not found
         </h2>
       </body>
     </html>
