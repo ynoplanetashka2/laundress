@@ -17,10 +17,14 @@ export default async function Home() {
   if (!session?.user) {
     redirect('/api/auth/signin');
   }
-  const accounts = await getAccounts();
   const email = session?.user?.email;
   if (isNil(email)) {
-    throw new Error('user has no email');
+    redirect('/en/forbidden');
+  }
+  const accounts = await getAccounts();
+  const isInWhiteList = accounts.map(({ email }) => email).includes(email);
+  if (!isInWhiteList) {
+    redirect('/en/forbidden');
   }
   const bookings = await getBookings();
   const washingMachines = await getWashingMachines();

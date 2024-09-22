@@ -31,5 +31,8 @@
     "bookTooShortError": "can not book for less than half an hour",
     "bookTimeAlreadyReservedError": "the specified time inverval already reserved",
     "bookInNotWorkingIntervalError": "can not book for time other than from 7:00 AM up to 12:00 PM (UTC+3)"
+  },
+  "Forbidden": {
+    "noAccess": "You don't have access to this resource. Please, ensure You logged in from proper account"
   }
 }
