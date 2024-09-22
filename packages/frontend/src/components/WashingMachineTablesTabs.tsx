@@ -15,6 +15,7 @@ import { BookingForm } from './BookingForm';
 import { bookMachineTime } from '@/api/bookMachineTime';
 import { useSession } from 'next-auth/react';
 import { deleteBooking } from '@/api/deleteBooking';
+import { useRouter } from 'next/navigation';
 
 type MachinesBookings = {
   [machineId in string]: Booking[];
@@ -95,6 +96,7 @@ export default function WashingMachineTablesTabs({
   const translateTimetable = useTranslations('Timetable');
   const translateBooking = useTranslations('Booking');
   const session = useSession();
+  const router = useRouter();
   const userEmail = session.data?.user?.email;
   const daysLabels = Object.fromEntries(
     WEEKDAYS_NAMES.map((weekdayName) => [
@@ -146,7 +148,10 @@ export default function WashingMachineTablesTabs({
                   daysOrder={daysOrder as string[]}
                   daysLabels={daysLabels}
                   timeColumnHeader={translateTimetable('time')}
-                  onDeleteEventClick={deleteBooking}
+                  onDeleteEventClick={async (bookingId: string) => {
+                    await deleteBooking(bookingId);
+                    router.refresh();
+                  }}
                 />
               ) : (
                 <Typography variant="body1">

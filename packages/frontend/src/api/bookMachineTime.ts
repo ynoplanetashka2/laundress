@@ -9,26 +9,29 @@ import { randomUUID } from 'node:crypto';
 
 export async function bookMachineTime(
   booking: Omit<Booking, 'bookedUserEmail' | '_id'>
-) {
-  BookingSchema.omit({ bookedUserEmail: true, _id: true, })
+): Promise<{ error?: string; }> {
+  const parseResult = BookingSchema.omit({ bookedUserEmail: true, _id: true, })
     .refine(
       ({ fromTime, upToTime }) => new Date(upToTime).getTime() >= new Date(fromTime).getTime(),
       {
         message: 'upToTime can not be less than fromTime',
       },
     )
-    .parse(booking);
+    .safeParse(booking);
+  if (parseResult.error) {
+    return { error: parseResult.error.toString() };
+  }
 
   const session = await getServerSession();
   const email = session?.user?.email;
   if (!email) {
-    throw new Error('email not specified');
+    return { error: 'email not specified' };
   }
 
   const accounts = await getAccounts();
   const emails = accounts.map(({ email }) => email);
   if (!emails.includes(email)) {
-    throw new Error('forbidden');
+    return { error: 'forbidden' };
   }
 
   const washingMachines = await getWashingMachines();
@@ -43,7 +46,7 @@ export async function bookMachineTime(
     roomNumber,
   } = booking;
   if (!washingMachinesIds.includes(washingMachineId)) {
-    throw new Error('invalid washing machine id');
+    return { error: 'invalid washing machine id' };
   }
 
   const ONE_HOUR = 60 * 60 * 1_000;
@@ -52,19 +55,19 @@ export async function bookMachineTime(
   const MAX_BOOK_DURATION = 5 * ONE_HOUR;
   const now = new Date();
   if (now.getTime() > new Date(fromTime).getTime()) {
-    throw new Error('can not book for the past');
+    return { error: 'can not book for the past' };
   }
   if (now.getTime() + MAX_BOOK_IN_ADVANCE < new Date(upToTime).getTime()) {
-    throw new Error('can not book more than 24 hours in advance');
+    return { error: 'can not book more than 24 hours in advance' };
   }
   if (new Date(upToTime).getTime() - new Date(fromTime).getTime() > MAX_BOOK_DURATION) {
-    throw new Error('can not book for more than 5 hours');
+    return { error: 'can not book for more than 5 hours' };
   }
 
   return await executeMongo(async (db) => {
     const collection = db.collection<Booking>('booking');
     const uuid = randomUUID({ disableEntropyCache: true });
-    return await collection.insertOne({
+    await collection.insertOne({
       _id: uuid,
       washingMachineId,
       fromTime: new Date(fromTime),
@@ -74,5 +77,6 @@ export async function bookMachineTime(
       roomNumber,
       bookedUserEmail: email,
     });
+    return {};
   });
 }

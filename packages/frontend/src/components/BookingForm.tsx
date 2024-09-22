@@ -3,19 +3,21 @@
 import type { Booking } from '@/schemas/Booking';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { Button, FormLabel, Input, Typography } from '@mui/material';
-import { useTranslations } from 'next-intl';
 import { useId, useState, type CSSProperties, type FormEvent } from 'react';
 import { DateTime } from 'luxon';
 import { inRange } from 'lodash';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 type Props = {
-  onSubmit?: (booking: Omit<Booking, 'bookedUserEmail' | '_id'>) => void;
+  onSubmit?: (booking: Omit<Booking, 'bookedUserEmail' | '_id'>) => Promise<{ error?: string; }>;
   washingMachineId: string;
   style?: CSSProperties;
 };
 
 export function BookingForm({ style, onSubmit, washingMachineId }: Props) {
   const t = useTranslations('Booking');
+  const router = useRouter();
   const [firstname, setFirstname] = useState('');
   const [lastname, setLastname] = useState('');
   const [fromTime, setFromTime] = useState(DateTime.now().plus({ minutes: 5 }));
@@ -30,7 +32,7 @@ export function BookingForm({ style, onSubmit, washingMachineId }: Props) {
   const firstnameInputId = `firstname-input-${id}`;
   const lastnameInputId = `lastname-input-${id}`;
   const roomNumberInputId = `room-number-input-${id}`;
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const FIRSTNAME_MIN_LENGTH = 1;
     const FIRSTNAME_MAX_LENGTH = 20;
@@ -88,7 +90,7 @@ export function BookingForm({ style, onSubmit, washingMachineId }: Props) {
     }
     setError(null);
     if (onSubmit) {
-      onSubmit({
+      const { error } = await onSubmit({
         firstname,
         lastname,
         fromTime: fromTime.toJSDate(),
@@ -96,6 +98,15 @@ export function BookingForm({ style, onSubmit, washingMachineId }: Props) {
         roomNumber,
         washingMachineId: washingMachineId,
       });
+      if (error) {
+        if (t.raw(error) !== `Booking.${error}`) {
+          setError(t(error));
+        } else {
+          setError(error);
+        }
+      } else {
+        router.refresh();
+      }
     }
   }
   function handleFromTimeChange(newFromTime: DateTime<true>) {
