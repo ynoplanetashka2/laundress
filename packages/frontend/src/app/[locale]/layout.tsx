@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/authOptions';
+import TopBar from '@/components/TopBar';
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
