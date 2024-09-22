@@ -69,13 +69,13 @@ export default function Timetable<DayLabel extends string>({
   onDeleteEventClick,
 }: Props<DayLabel>) {
   const MIN_TIME = 7;
-  const MAX_TIME = 18;
+  const MAX_TIME = 24;
   const MIN_DATE_TIME = DateTime.fromObject(
     { hour: MIN_TIME, minute: 0, second: 0, millisecond: 0 },
     { locale: 'ru-RU', zone: 'UTC+3' },
   );
   const MAX_DATE_TIME = DateTime.fromObject(
-    { hour: MAX_TIME, minute: 0, second: 0, millisecond: 0 },
+    { hour: 23, minute: 59, second: 59, millisecond: 999 },
     { locale: 'ru-RU', zone: 'UTC+3' },
   );
   const columnsCount = daysOrder.length + 1;
