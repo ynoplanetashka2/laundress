@@ -21,6 +21,7 @@ import { authOptions } from '../api/auth/[...nextauth]/authOptions';
 
 export const metadata: Metadata = {
   title: 'laundress',
+  icons: '/images/washing_machine.png',
 };
 
 export default async function RootLayout({
