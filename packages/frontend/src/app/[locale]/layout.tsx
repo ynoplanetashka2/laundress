@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   icons: '/images/washing_machine.png',
 };
 
-export default async function RootLayout({
+export default async function MainLayout({
   children,
   params: { locale },
 }: Readonly<{

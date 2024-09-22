@@ -11,7 +11,7 @@ type Props = {
 
 export default function TagsEditList({ tags, onSave, label }: Props) {
   const concatenatedTags = tags.join('\n');
-  function handleSubmit(event: FormEvent<HTMLDivElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const newConcatenatedTags: string = textareaRef.current!.value;
     const newSplittedTags = newConcatenatedTags.split('\n');
@@ -23,11 +23,11 @@ export default function TagsEditList({ tags, onSave, label }: Props) {
   const textareaId = `textarea-${id}`;
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   return (
-    <FormControl onSubmit={handleSubmit}>
+    <FormControl component='form' onSubmit={handleSubmit}>
       <Box>
         <FormLabel htmlFor={textareaId}>{ label }</FormLabel>
         <TextareaAutosize ref={textareaRef} id={textareaId} defaultValue={concatenatedTags} className='w-2/3 block resize mb-3' placeholder={label} />
-        <Button type='submit' color='primary' variant='contained' onClick={() => onSave && onSave(tags)}>save</Button>
+        <Button type='submit' color='primary' variant='contained'>save</Button>
         <FormHelperText>{ label }</FormHelperText>
       </Box>
     </FormControl>

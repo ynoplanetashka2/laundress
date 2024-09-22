@@ -13,6 +13,18 @@ import { getBookings } from './getBookings';
 export async function bookMachineTime(
   booking: Omit<Booking, 'bookedUserEmail' | '_id' | 'expireAt'>,
 ): Promise<{ error?: string }> {
+  const session = await getServerSession();
+  const email = session?.user?.email;
+  if (!email) {
+    return { error: 'email not specified' };
+  }
+
+  const accounts = await getAccounts();
+  const emails = accounts.map(({ email }) => email);
+  if (!emails.includes(email)) {
+    return { error: 'forbidden' };
+  }
+
   const parseResult = BookingSchema.omit({
     bookedUserEmail: true,
     _id: true,
@@ -35,18 +47,6 @@ export async function bookMachineTime(
     .safeParse(booking);
   if (parseResult.error) {
     return { error: parseResult.error.toString() };
-  }
-
-  const session = await getServerSession();
-  const email = session?.user?.email;
-  if (!email) {
-    return { error: 'email not specified' };
-  }
-
-  const accounts = await getAccounts();
-  const emails = accounts.map(({ email }) => email);
-  if (!emails.includes(email)) {
-    return { error: 'forbidden' };
   }
 
   const washingMachines = await getWashingMachines();

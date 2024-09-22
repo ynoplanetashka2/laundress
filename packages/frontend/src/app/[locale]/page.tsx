@@ -9,8 +9,11 @@ import LanguageSelect from '@/components/LanguageSelect';
 import SignInButton from '@/components/SignInButton';
 import WashingMachineTablesTabs from '@/components/WashingMachineTablesTabs';
 import type { Booking } from '@/schemas/Booking';
-import { Box, Card } from '@mui/material';
-import { isNil } from 'lodash';
+import { Card } from '@mui/material';
+import { isNil, uniqBy } from 'lodash';
+import AdminTools from '@/components/AdminTools';
+import { updateAccounts } from '@/api/updateAccounts';
+import type { Account } from '@/schemas/Account';
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -34,11 +37,44 @@ export default async function Home() {
       ({ washingMachineId }) => washingMachineId,
     ) as Record<string, Booking[]>),
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const isAdmin = accounts
+  const userAccountsEmails = accounts
+    .filter(({ priviledge }) => priviledge === 'user')
+    .map(({ email }) => email);
+  const adminAccountsEmails = accounts
     .filter(({ priviledge }) => priviledge === 'admin')
-    .map(({ email }) => email)
-    .includes(email);
+    .map(({ email }) => email);
+  const isAdmin = adminAccountsEmails.includes(email);
+  const washingMachinesLabels = washingMachines.map(({ label }) => label);
+  async function handleAdminAcconutsEmailsUpdate(newEmails: string[]) {
+    'use server';
+    return await updateAccounts(
+      uniqBy(
+        [
+          ...newEmails.map<Account>((email) => ({
+            email,
+            priviledge: 'admin',
+          })),
+          ...accounts,
+        ],
+        ({ email }) => email,
+      ),
+    );
+  }
+  async function handleUserAcconutsEmailsUpdate(newEmails: string[]) {
+    'use server';
+    return await updateAccounts(
+      uniqBy(
+        [
+          ...newEmails.map<Account>((email) => ({ email, priviledge: 'user' })),
+          ...accounts,
+        ],
+        ({ email }) => email,
+      ),
+    );
+  }
+  async function handleWashingMachinesLabelsUpdate(newLabels: string[]) {
+    'use server';
+  }
   return (
     <>
       <div className="w-20">
@@ -54,6 +90,16 @@ export default async function Home() {
         machineBookings={groupedBookings}
         washingMachines={washingMachines}
       />
+      {isAdmin ? (
+        <AdminTools
+          adminAccountsEmails={adminAccountsEmails}
+          userAccountsEmails={userAccountsEmails}
+          washingMachinesLabels={washingMachinesLabels}
+          onAdminAccountsEmailsUpdate={handleAdminAcconutsEmailsUpdate}
+          onUserAccountsEmailsUpdate={handleUserAcconutsEmailsUpdate}
+          onWashingMachinesLabelsUdate={handleWashingMachinesLabelsUpdate}
+        />
+      ) : null}
     </>
   );
 }
