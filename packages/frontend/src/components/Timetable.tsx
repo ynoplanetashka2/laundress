@@ -187,7 +187,7 @@ export default function Timetable<DayLabel extends string>({
                 }}
                 className={`${isRemovable ? 'bg-green-300' : 'bg-orange-400' } bg-opacity-80 text-center overflow-y-auto relative`}
               >
-                <button className="absolute top-0 right-1 cursor-pointer" onClick={() => onDeleteEventClick && onDeleteEventClick(id)}>
+                <button className="absolute top-0 right-1 cursor-pointer bg-slate-100 bg-opacity-75 rounded-md" onClick={() => onDeleteEventClick && onDeleteEventClick(id)}>
                   <Typography variant='button'>X</Typography>
                 </button>
                 <span>{label}</span>
