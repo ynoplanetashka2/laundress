@@ -27,10 +27,6 @@ function range(upTo: number): number[] {
   return new Array(upTo).fill(void 0).map((_, index) => index);
 }
 
-function getWeekday(date: Date): WeekdayNumbers {
-  return DateTime.fromJSDate(date, { zone: 'UTC+3' }).weekday as WeekdayNumbers;
-}
-
 function computeProportionsForEvents(
   minTime: number,
   maxTime: number,

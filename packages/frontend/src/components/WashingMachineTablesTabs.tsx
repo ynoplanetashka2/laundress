@@ -141,7 +141,7 @@ export default function WashingMachineTablesTabs({
           const bookings = machineBookings[machineId];
           const { daysOrder, events } =
             bookings !== undefined
-              ? bookingsToTimetableParams(bookings, userEmail ?? undefined)
+              ? bookingsToTimetableParams(bookings, userEmail ?? undefined, isAdminView ?? undefined)
               : {
                   daysOrder: [],
                   events: {},
