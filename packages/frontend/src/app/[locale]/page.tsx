@@ -12,10 +12,10 @@ import type { Booking } from '@/schemas/Booking';
 import { Card } from '@mui/material';
 import { isNil, uniqBy } from 'lodash';
 import AdminTools from '@/components/AdminTools';
-import { updateAccounts } from '@/api/updateAccounts';
 import type { Account } from '@/schemas/Account';
 import { updateWashingMachines } from '@/api/updateWashingMachines';
 import type { WashingMachine } from '@/schemas/WashingMachine';
+import { updateAccountsWithPriviledge } from '@/api/updateAccountsWithPriviledge';
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -49,39 +49,23 @@ export default async function Home() {
   const washingMachinesLabels = washingMachines.map(({ label }) => label);
   async function handleAdminAcconutsEmailsUpdate(newEmails: string[]) {
     'use server';
-    return await updateAccounts(
-      uniqBy(
-        [
-          ...newEmails.map<Account>((email) => ({
-            email,
-            priviledge: 'admin',
-          })),
-          ...accounts,
-        ],
-        ({ email }) => email,
-      ),
+    return await updateAccountsWithPriviledge(
+      newEmails.map<Omit<Account, 'priviledge'>>((email) => ({ email })),
+      'admin',
     );
   }
   async function handleUserAcconutsEmailsUpdate(newEmails: string[]) {
     'use server';
-    return await updateAccounts(
-      uniqBy(
-        [
-          ...newEmails.map<Account>((email) => ({ email, priviledge: 'user' })),
-          ...accounts,
-        ],
-        ({ email }) => email,
-      ),
+    return await updateAccountsWithPriviledge(
+      newEmails.map<Omit<Account, 'priviledge'>>((email) => ({ email })),
+      'user',
     );
   }
   async function handleWashingMachinesLabelsUpdate(newLabels: string[]) {
     'use server';
     return await updateWashingMachines(
       uniqBy(
-        [
-          ...newLabels.map<WashingMachine>((label) => ({ label, _id: label })),
-          ...washingMachines,
-        ],
+        newLabels.map<WashingMachine>((label) => ({ label, _id: label })),
         ({ label }) => label,
       ),
     );
