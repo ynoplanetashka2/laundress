@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import { mapValues } from 'lodash';
 import { DateTime } from 'luxon';
 import type React from 'react';
 
@@ -64,6 +65,9 @@ export default function Timetable<DayLabel extends string>({
   timeColumnHeader = 'TIME',
   onDeleteEventClick,
 }: Props<DayLabel>) {
+  events = mapValues(events, (eventsOfDay) => {
+    return eventsOfDay.toSorted(({ startTime: time1 }, { startTime: time2 }) => time1.getTime() - time2.getTime());
+  })
   const MIN_TIME = 7;
   const MAX_TIME = 24;
   const MIN_DATE_TIME = DateTime.fromObject(
