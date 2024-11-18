@@ -128,6 +128,9 @@ export default function WashingMachineTablesTabs({
       <TabContext value={currentMachineId}>
         <Box sx={{ borderBottom: 2, borderColor: 'divider' }}>
           <TabList
+            allowScrollButtonsMobile={true}
+            variant='scrollable'
+            scrollButtons={true}
             onChange={(_, newCurrentMachineId) =>
               setCurrentMachineId(newCurrentMachineId)
             }

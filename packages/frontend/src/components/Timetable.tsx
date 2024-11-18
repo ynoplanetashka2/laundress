@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { DateTime, type WeekdayNumbers } from 'luxon';
+import { DateTime } from 'luxon';
 import type React from 'react';
 
 export type Event = {
