@@ -74,7 +74,8 @@ export function BookingForm({ style, onSubmit, washingMachineId, washingMachineL
       return;
     }
     const ONE_DAY = 24 * 60 * 60 * 1_000;
-    if (upToTime.diffNow().toMillis() > ONE_DAY) {
+    const TWO_DAYS = 2 * ONE_DAY;
+    if (upToTime.diffNow().toMillis() > TWO_DAYS) {
       setError(t('bookInTooAdvanceError'));
       return;
     }
@@ -160,14 +161,14 @@ export function BookingForm({ style, onSubmit, washingMachineId, washingMachineL
               newFromTime && handleFromTimeChange(newFromTime)
             }
             minDateTime={DateTime.now()}
-            maxDateTime={DateTime.now().plus({ day: 1 })}
+            maxDateTime={DateTime.now().plus({ day: 2 })}
           />
           <DateTimePicker
             label={t('upToTime')}
             value={upToTime}
             onChange={(newUpToTime) => newUpToTime && setUpToTime(newUpToTime)}
             minDateTime={fromTime}
-            maxDateTime={DateTime.now().plus({ day: 1 })}
+            maxDateTime={DateTime.now().plus({ day: 2 })}
           />
         </div>
         {error ? (

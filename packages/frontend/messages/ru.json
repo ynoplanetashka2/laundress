@@ -24,7 +24,7 @@
     "firstnameLengthError": "дллина имени должна быть от 1 до 20 символов",
     "lastnameLengthError": "дллина фамилии должна быть от 1 до 20 символов",
     "roomNumberError": "номер комнаты должен состоять из 3 цифр",
-    "bookInTooAdvanceError": "нельзя бронировать более чем за 24 часа",
+    "bookInTooAdvanceError": "нельзя бронировать более чем за 48 часов",
     "bookInThePastError": "нельзя бронировать прошедшее время",
     "bookEndTimeLessThanBookStartTimeError": "верхняя граница времени бронирования не может быть меньше нижней границы",
     "bookTooLongError": "нельзя бронировать более 5 часов",

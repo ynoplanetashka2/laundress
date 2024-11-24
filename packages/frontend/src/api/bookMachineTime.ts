@@ -66,7 +66,7 @@ export async function bookMachineTime(
 
   const ONE_HOUR = 60 * 60 * 1_000;
   const ONE_DAY = 24 * ONE_HOUR;
-  const MAX_BOOK_IN_ADVANCE = ONE_DAY;
+  const MAX_BOOK_IN_ADVANCE = 2 * ONE_DAY;
   const MAX_BOOK_DURATION = 5 * ONE_HOUR;
   const MIN_BOOK_DURATION = 0.5 * ONE_HOUR;
   const fromLuxonTime = DateTime.fromJSDate(fromTime);

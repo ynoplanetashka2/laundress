@@ -24,7 +24,7 @@
     "firstnameLengthError": "first name length should be in range from 1 up to 20",
     "lastnameLengthError": "last name length should be in range from 1 up to 20",
     "roomNumberError": "room number should contain 3 digits",
-    "bookInTooAdvanceError": "can not book in more than 24 hours advance",
+    "bookInTooAdvanceError": "can not book in more than 48 hours advance",
     "bookInThePastError": "can not book in the past",
     "bookEndTimeLessThanBookStartTimeError": "booking end time can not be less than booking start time",
     "bookTooLongError": "can not book more than 5 hours",
